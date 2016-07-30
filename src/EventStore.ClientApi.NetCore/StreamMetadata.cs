@@ -48,11 +48,11 @@ namespace EventStore.ClientAPI
         public IEnumerable<KeyValuePair<string, string>> CustomMetadataAsRawJsons
         {
             get { return _customMetadata.Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())); }
-        } 
+        }
 
         private readonly IDictionary<string, JToken> _customMetadata;
 
-        internal StreamMetadata(int? maxCount, TimeSpan? maxAge, int? truncateBefore, TimeSpan? cacheControl, 
+        internal StreamMetadata(int? maxCount, TimeSpan? maxAge, int? truncateBefore, TimeSpan? cacheControl,
                                 StreamAcl acl, IDictionary<string, JToken> customMetadata = null)
         {
             if (maxCount <= 0)
@@ -70,7 +70,7 @@ namespace EventStore.ClientAPI
             TruncateBefore = truncateBefore;
             CacheControl = cacheControl;
             Acl = acl;
-            _customMetadata = customMetadata ?? Empty.CustomStreamMetadata;  
+            _customMetadata = customMetadata ?? Empty.CustomStreamMetadata;
         }
 
         /// <summary>
@@ -88,12 +88,38 @@ namespace EventStore.ClientAPI
         }
 
         /// <summary>
-        /// Builds a <see cref="StreamMetadata"/> from a <see cref="StreamMetadataBuilder" />.
+        /// Creates a <see cref="StreamMetadataBuilder" /> for building a new <see cref="StreamMetadata"/>.
         /// </summary>
-        /// <returns>An instance of <see cref="StreamMetadata"/>.</returns>
+        /// <returns>An instance of <see cref="StreamMetadataBuilder"/>.</returns>
         public static StreamMetadataBuilder Build()
         {
             return new StreamMetadataBuilder();
+        }
+
+        /// <summary>
+        /// Creates a <see cref="StreamMetadataBuilder" /> initialized with the values of this <see cref="StreamMetadata"/>
+        /// </summary>
+        /// <returns>An instance of <see cref="StreamMetadataBuilder"/>.</returns>
+        public StreamMetadataBuilder Copy()
+        {
+            if(Acl == null)
+                return new StreamMetadataBuilder(
+                    MaxCount,
+                    MaxAge,
+                    TruncateBefore,
+                    CacheControl,
+                    customMetadata: _customMetadata);
+            return new StreamMetadataBuilder(
+                MaxCount,
+                MaxAge,
+                TruncateBefore,
+                CacheControl,
+                Acl.ReadRoles,
+                Acl.WriteRoles,
+                Acl.DeleteRoles,
+                Acl.MetaReadRoles,
+                Acl.MetaWriteRoles,
+                _customMetadata);
         }
 
         /// <summary>
@@ -403,7 +429,7 @@ namespace EventStore.ClientAPI
         {
             if (reader.TokenType != type)
                 throw new Exception("Invalid JSON");
-        } 
+        }
 
         private static void Check(bool read, JsonTextReader reader)
         {

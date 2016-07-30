@@ -20,10 +20,30 @@ namespace EventStore.ClientAPI
         private string[] _aclMetaRead;
         private string[] _aclMetaWrite;
 
-        private readonly IDictionary<string, JToken> _customMetadata = new Dictionary<string, JToken>();
+        private readonly IDictionary<string, JToken> _customMetadata;
 
-        internal StreamMetadataBuilder()
+        internal StreamMetadataBuilder(
+            int? maxCount = null,
+            TimeSpan? maxAge = null,
+            int? truncateBefore = null,
+            TimeSpan? cacheControl = null,
+            string[] aclRead = null,
+            string[] aclWrite = null,
+            string[] aclDelete = null,
+            string[] aclMetaRead = null,
+            string[] aclMetaWrite = null,
+            IDictionary<string, JToken> customMetadata = null)
         {
+            _maxCount = maxCount;
+            _maxAge = maxAge;
+            _truncateBefore = truncateBefore;
+            _cacheControl = cacheControl;
+            _aclRead = aclRead;
+            _aclWrite = aclWrite;
+            _aclDelete = aclDelete;
+            _aclMetaRead = aclMetaRead;
+            _aclMetaWrite = aclMetaWrite;
+            _customMetadata = customMetadata == null ? new Dictionary<string, JToken>() : new Dictionary<string, JToken>(customMetadata);
         }
 
         /// <summary>
@@ -41,8 +61,8 @@ namespace EventStore.ClientAPI
         /// </summary>
         public StreamMetadata Build() {
             var acl = this._aclRead == null
-                      && this._aclWrite == null 
-                      && this._aclDelete == null 
+                      && this._aclWrite == null
+                      && this._aclDelete == null
                       && this._aclMetaRead == null
                       && this._aclMetaWrite == null
                 ? null
