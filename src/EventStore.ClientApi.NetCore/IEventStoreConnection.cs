@@ -487,7 +487,7 @@ namespace EventStore.ClientAPI
         /// <param name="groupName">The name of the group to create</param>
         /// <param name="settings">The <see cref="PersistentSubscriptionSettings"></see> for the subscription</param>
         /// <param name="credentials">The credentials to be used for this operation.</param>
-        /// <returns>A <see cref="PersistentSubscriptionCreateResult"/>.</returns>
+        /// <returns>A <see cref="Task"/>.</returns>
         Task UpdatePersistentSubscriptionAsync(string stream, string groupName, PersistentSubscriptionSettings settings, UserCredentials credentials);
 
 
@@ -498,7 +498,7 @@ namespace EventStore.ClientAPI
         /// <param name="groupName">The name of the group to create</param>
         /// <param name="settings">The <see cref="PersistentSubscriptionSettings"></see> for the subscription</param>
         /// <param name="credentials">The credentials to be used for this operation.</param>
-        /// <returns>A <see cref="PersistentSubscriptionCreateResult"/>.</returns>
+        /// <returns>A <see cref="Task"/>.</returns>
         Task CreatePersistentSubscriptionAsync(string stream, string groupName, PersistentSubscriptionSettings settings, UserCredentials credentials);
 
 
@@ -508,7 +508,7 @@ namespace EventStore.ClientAPI
         /// <param name="stream">The name of the stream to delete the persistent subscription on</param>
         /// <param name="groupName">The name of the group to delete</param>
         /// <param name="userCredentials">User credentials to use for the operation</param>
-        /// <returns>A <see cref="PersistentSubscriptionDeleteResult"/>.</returns>
+        /// <returns>A <see cref="Task"/>.</returns>
         Task DeletePersistentSubscriptionAsync(string stream, string groupName, UserCredentials userCredentials = null);
 
         /*

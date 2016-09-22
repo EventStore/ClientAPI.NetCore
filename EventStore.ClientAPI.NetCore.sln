@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "EventStore.ClientAPI.NetCore", "src\EventStore.ClientAPI.NetCore\EventStore.ClientAPI.NetCore.xproj", "{AFE5579C-111B-47F3-96E0-5E08DAA2215C}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Eventstore.ClientAPI.NetCore.Tests", "test\Eventstore.ClientAPI.NetCore.Tests\Eventstore.ClientAPI.NetCore.Tests.xproj", "{E5A83A9B-5E67-47DF-B96A-4401BB2AB3F1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{409E446B-19AB-4BE4-91D8-7BD3BC2A0C37}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AFE5579C-111B-47F3-96E0-5E08DAA2215C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE5579C-111B-47F3-96E0-5E08DAA2215C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE5579C-111B-47F3-96E0-5E08DAA2215C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE5579C-111B-47F3-96E0-5E08DAA2215C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5A83A9B-5E67-47DF-B96A-4401BB2AB3F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5A83A9B-5E67-47DF-B96A-4401BB2AB3F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5A83A9B-5E67-47DF-B96A-4401BB2AB3F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5A83A9B-5E67-47DF-B96A-4401BB2AB3F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
