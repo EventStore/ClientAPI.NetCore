@@ -1,4 +1,4 @@
-box: ruudk/ubuntu14.04@1.0.0
+box: ruudk/ubuntu14.04
 build:
   steps:
     - script:
