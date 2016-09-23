@@ -18,9 +18,16 @@ build:
           wget http://download.geteventstore.com/binaries/EventStore-OSS-Ubuntu-14.04-v3.9.1.tar.gz
           tar xfv EventStore-OSS-Ubuntu-14.04-v3.9.1.tar.gz
           nohup ./EventStore-OSS-Ubuntu-14.04-v3.9.1/eventstored &
+          
+    # Build
+    - script:
+        name: Build project
+        code: |
+          ./build.sh
 
     # Run tests
     - script:
         name: Run tests
         code: |
+          dotnet restore
           dotnet test test/EventStore.ClientAPI.NetCore.Tests/project.json
