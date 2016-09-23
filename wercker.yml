@@ -12,12 +12,12 @@ build:
           apt-get install dotnet-dev-1.0.0-preview2-003131 -y
 
     - script:
-        name: install eventstore
+        name: install and run eventstore
         code: |
           apt-get install wget
           wget http://download.geteventstore.com/binaries/EventStore-OSS-Ubuntu-14.04-v3.9.1.tar.gz
           tar xfv EventStore-OSS-Ubuntu-14.04-v3.9.1.tar.gz
-          nohup ./EventStore-OSS-Ubuntu-14.04-v3.9.1/eventstored &
+          nohup ./EventStore-OSS-Ubuntu-14.04-v3.9.1/eventstored --enable-trusted-auth &
           
     # Build
     - script:
@@ -30,4 +30,4 @@ build:
         name: Run tests
         code: |
           dotnet restore
-          dotnet test test/EventStore.ClientAPI.NetCore.Tests/project.json
+          dotnet test ./test/EventStore.ClientAPI.NetCore.Tests/project.json
