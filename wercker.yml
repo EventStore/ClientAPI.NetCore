@@ -30,4 +30,4 @@ build:
         name: Run tests
         code: |
           dotnet restore
-          dotnet test ./test/EventStore.ClientAPI.NetCore.Tests/project.json
+          dotnet test/EventStore.ClientAPI.NetCore.Tests/project.json
