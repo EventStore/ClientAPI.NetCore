@@ -1,4 +1,4 @@
-box: ruudk/ubuntu14.04
+box: wercker/default
 build:
   steps:
     - script:
