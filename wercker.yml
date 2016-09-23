@@ -1,0 +1,23 @@
+box: ubuntu14.04
+build:
+  steps:
+    - script:
+        name: install dotnet core
+        code: |
+		  sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
+		  apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893
+          apt-get update
+
+    - script:
+        name: install eventstore
+        code: |
+          apt-get install wget
+          wget http://download.geteventstore.com/binaries/EventStore-OSS-Ubuntu-14.04-v3.9.1.tar.gz
+          tar xfv EventStore-OSS-Ubuntu-14.04-v3.9.1.tar.gz
+          nohup ./EventStore-OSS-Ubuntu-14.04-v3.9.1/eventstored &
+
+    # Run tests
+    - script:
+        name: Run tests
+        code: |
+		  dotnet test test/EventStore.ClientAPI.NetCore.Tests/project.json
