@@ -11,6 +11,7 @@ namespace Eventstore.ClientAPI.Tests
     public class read_all_events_backward_should : SpecificationWithConnection
     {
         private EventData[] _testEvents;
+        private Position _endOfEvents;
 
         protected override void When()
         {
@@ -20,7 +21,19 @@ namespace Eventstore.ClientAPI.Tests
             .Wait();
 
             _testEvents = Enumerable.Range(0, 20).Select(x => TestEvent.NewTestEvent(x.ToString())).ToArray();
-            _conn.AppendToStreamAsync("stream", ExpectedVersion.EmptyStream, _testEvents).Wait();
+            _conn.AppendToStreamAsync("stream-" + Guid.NewGuid(), ExpectedVersion.EmptyStream, _testEvents).Wait();
+            var result = _conn.AppendToStreamAsync("stream-" + Guid.NewGuid(), ExpectedVersion.NoStream,
+                TestEvent.NewTestEvent()).Result;
+            var lastId = _testEvents.Last().EventId;
+            _endOfEvents = result.LogPosition;
+            do
+            {
+                var slice = _conn.ReadAllEventsBackwardAsync(_endOfEvents, 1, false).Result;
+                if (slice.Events[0].Event.EventId == lastId) break;
+                _endOfEvents = slice.NextPosition;
+            } while (true);
+
+
         }
 
         [Test, Category("LongRunning")]
@@ -34,7 +47,7 @@ namespace Eventstore.ClientAPI.Tests
         [Test, Category("LongRunning"), Ignore("No way to really do this against an external store")]
         public void return_partial_slice_if_not_enough_events()
         {
-            var read = _conn.ReadAllEventsBackwardAsync(Position.End, 30, false).Result;
+            var read = _conn.ReadAllEventsBackwardAsync(_endOfEvents, 30, false).Result;
             Assert.That(read.Events.Length, Is.LessThan(30));
             Assert.That(EventDataComparer.Equal(_testEvents.Reverse().ToArray(),
                                                 read.Events.Take(_testEvents.Length).Select(x => x.Event).ToArray()));
@@ -43,8 +56,8 @@ namespace Eventstore.ClientAPI.Tests
         [Test, Category("LongRunning")]
         public void return_events_in_reversed_order_compared_to_written()
         {
-            var read = _conn.ReadAllEventsBackwardAsync(Position.End, _testEvents.Length, false).Result;
-            Assert.That(EventDataComparer.Equal(_testEvents.Reverse().ToArray(), 
+            var read = _conn.ReadAllEventsBackwardAsync(_endOfEvents, _testEvents.Length, false).Result;
+            Assert.That(EventDataComparer.Equal(_testEvents.Reverse().ToArray(),
                                                 read.Events.Select(x => x.Event).ToArray()));
         }
 
@@ -52,7 +65,7 @@ namespace Eventstore.ClientAPI.Tests
         public void be_able_to_read_all_one_by_one_until_end_of_stream()
         {
             var all = new List<RecordedEvent>();
-            var position = Position.End;
+            var position = _endOfEvents;
             AllEventsSlice slice;
 
             while (!(slice = _conn.ReadAllEventsBackwardAsync(position, 1, false).Result).IsEndOfStream)
@@ -64,11 +77,12 @@ namespace Eventstore.ClientAPI.Tests
             Assert.That(EventDataComparer.Equal(_testEvents.Reverse().ToArray(), all.Take(_testEvents.Length).ToArray()));
         }
 
-        [Test, Category("LongRunning")]
+        [Test]
+        [Category("LongRunning")]
         public void be_able_to_read_events_slice_at_time()
         {
             var all = new List<RecordedEvent>();
-            var position = Position.End;
+            var position = _endOfEvents;
             AllEventsSlice slice;
 
             while (!(slice = _conn.ReadAllEventsBackwardAsync(position, 5, false).Result).IsEndOfStream)
