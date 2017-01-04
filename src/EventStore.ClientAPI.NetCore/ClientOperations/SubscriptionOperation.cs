@@ -208,7 +208,7 @@ namespace EventStore.ClientAPI.ClientOperations
 
                 if (reason != SubscriptionDropReason.UserInitiated)
                 {
-                    if (exc == null) throw new Exception(string.Format("No exception provided for subscription drop reason '{0}", reason));
+                    exc = exc ?? new Exception(string.Format("No exception provided for subscription drop reason '{0}", reason));
                     _source.TrySetException(exc);
                 }
 
