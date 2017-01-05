@@ -256,5 +256,10 @@ namespace Eventstore.ClientAPI.Tests
         {
             throw new NotImplementedException();
         }
+
+        public Task<ConditionalWriteResult> ConditionalAppendToStreamAsync(string stream, int expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
