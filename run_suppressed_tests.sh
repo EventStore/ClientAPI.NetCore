@@ -10,7 +10,7 @@ touch $BUILD_OUTPUT
 
 dump_output() {
    echo Tailing the last 500 lines of output:
-   tail -500 $BUILD_OUTPUT  
+   tail -500 $BUILD_OUTPUT
 }
 error_handler() {
   echo ERROR: An error was encountered with the build.
@@ -25,7 +25,7 @@ trap 'error_handler' ERR
 bash -c "while true; do echo \$(date) - building ...; sleep $PING_SLEEP; done" &
 PING_LOOP_PID=$!
 
-dotnet test test/EventStore.ClientAPI.NetCore.Tests/project.json >> $BUILD_OUTPUT 2>&1
+dotnet test test/EventStore.ClientAPI.NetCore.Tests/EventStore.ClientAPI.NetCore.Tests.csproj >> $BUILD_OUTPUT 2>&1
 
 # The build finished without returning an error so dump a tail of the output
 dump_output
