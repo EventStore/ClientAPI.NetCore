@@ -101,9 +101,11 @@ namespace EventStore.ClientAPI
         /// </summary>
         internal PersistentSubscriptionSettings(bool resolveLinkTos, int startFrom, bool extraStatistics, TimeSpan messageTimeout,
                                                 int maxRetryCount, int liveBufferSize, int readBatchSize, int historyBufferSize,
-                                                TimeSpan checkPointAfter, int minCheckPointCount, int maxCheckPointCount, 
+                                                TimeSpan checkPointAfter, int minCheckPointCount, int maxCheckPointCount,
                                                 int maxSubscriberCount, string namedConsumerStrategy)
         {
+            if(messageTimeout.TotalMilliseconds > Int32.MaxValue) throw new ArgumentException("messageTimeout", "milliseconds must be less or equal to than int32.MaxValue");
+            if(checkPointAfter.TotalMilliseconds > Int32.MaxValue) throw new ArgumentException("checkPointAfter", "milliseconds must be less or equal to than int32.MaxValue");
             MessageTimeout = messageTimeout;
             ResolveLinkTos = resolveLinkTos;
             StartFrom = startFrom;
