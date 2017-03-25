@@ -7,3 +7,4 @@ project.lock.json
 TestResult.xml
 *.nuget.props
 *.out
+*.ncrunchsolution.user

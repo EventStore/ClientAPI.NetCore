@@ -38,7 +38,7 @@ namespace Eventstore.ClientAPI.Tests
             _conn.DeleteStreamAsync(_stream, ExpectedVersion.Any).Wait();
         }
 
-        [Test, Category("LongRunning"), Ignore("TODO: Fix this to work with single ES instance")]
+        [Test, Category("LongRunning")]
         public void ensure_deleted_stream()
         {
             var res = _conn.ReadStreamEventsForwardAsync(_stream, 0, 100, false).Result;
