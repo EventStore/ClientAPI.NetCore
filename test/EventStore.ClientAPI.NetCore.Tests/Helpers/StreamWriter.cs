@@ -7,9 +7,9 @@ namespace Eventstore.ClientAPI.Tests.Helpers
     {
         private readonly IEventStoreConnection _store;
         private readonly string _stream;
-        private readonly int _version;
+        private readonly long _version;
 
-        public StreamWriter(IEventStoreConnection store, string stream, int version)
+        public StreamWriter(IEventStoreConnection store, string stream, long version)
         {
             _store = store;
             _stream = stream;

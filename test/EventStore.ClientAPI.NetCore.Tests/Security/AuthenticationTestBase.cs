@@ -236,7 +236,7 @@ namespace Eventstore.ClientAPI.Tests.Security
                                     login == null && password == null ? null : new UserCredentials(login, password)).Wait();
         }
 
-        protected void SetStreamMetadata(string streamId, int expectedVersion, StreamMetadata metadata, UserCredentials credentials)
+        protected void SetStreamMetadata(string streamId, long expectedVersion, StreamMetadata metadata, UserCredentials credentials)
         {
             Connection.SetStreamMetadataAsync(AdjustStreamId(streamId), expectedVersion, metadata, credentials).Wait();
         }

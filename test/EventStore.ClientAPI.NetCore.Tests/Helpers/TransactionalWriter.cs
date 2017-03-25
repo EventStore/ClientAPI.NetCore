@@ -13,7 +13,7 @@ namespace Eventstore.ClientAPI.Tests.Helpers
             _stream = stream;
         }
 
-        public OngoingTransaction StartTransaction(int expectedVersion)
+        public OngoingTransaction StartTransaction(long expectedVersion)
         {
             return new OngoingTransaction(_store.StartTransactionAsync(_stream, expectedVersion).Result);
         }

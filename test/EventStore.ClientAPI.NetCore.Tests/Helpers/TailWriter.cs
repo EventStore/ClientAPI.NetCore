@@ -13,7 +13,7 @@ namespace Eventstore.ClientAPI.Tests.Helpers
             _stream = stream;
         }
 
-        public TailWriter Then(EventData @event, int expectedVersion)
+        public TailWriter Then(EventData @event, long expectedVersion)
         {
             _store.AppendToStreamAsync(_stream, expectedVersion, new[] {@event}).Wait();
             return this;
