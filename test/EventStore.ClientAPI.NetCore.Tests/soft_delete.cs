@@ -120,7 +120,7 @@ namespace Eventstore.ClientAPI.Tests
             Assert.AreEqual(1, _conn.AppendToStreamAsync(stream, ExpectedVersion.NoStream, TestEvent.NewTestEvent(), TestEvent.NewTestEvent()).Result.NextExpectedVersion);
 
             Assert.AreEqual(0, _conn.SetStreamMetadataAsync(stream, ExpectedVersion.NoStream,
-                                    StreamMetadata.Build().SetTruncateBefore(int.MaxValue)
+                                    StreamMetadata.Build().SetTruncateBefore(long.MaxValue)
                                                           .SetMaxCount(100)
                                                           .SetDeleteRole("some-role")
                                                           .SetCustomProperty("key1", true)

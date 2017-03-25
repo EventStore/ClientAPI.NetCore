@@ -8,8 +8,8 @@ namespace Eventstore.ClientAPI.Tests
 {
     internal class FakeEventStoreConnection : IEventStoreConnection
     {
-        private Func<Position, int, bool, UserCredentials, Task<AllEventsSlice>> _readAllEventsForwardAsync;
-        private Func<string, int, int, Task<StreamEventsSlice>> _readStreamEventsForwardAsync;
+        private Func<Position, long, bool, UserCredentials, Task<AllEventsSlice>> _readAllEventsForwardAsync;
+        private Func<string, long, long, Task<StreamEventsSlice>> _readStreamEventsForwardAsync;
         private Func<string, Action<EventStoreSubscription, ResolvedEvent>, Action<EventStoreSubscription, SubscriptionDropReason, Exception>, Task<EventStoreSubscription>> _subscribeToStreamAsync;
 
         public void Dispose()
@@ -30,32 +30,32 @@ namespace Eventstore.ClientAPI.Tests
             throw new NotImplementedException();
         }
 
-        public Task<DeleteResult> DeleteStreamAsync(string stream, int expectedVersion, UserCredentials userCredentials = null)
+        public Task<DeleteResult> DeleteStreamAsync(string stream, long expectedVersion, UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<DeleteResult> DeleteStreamAsync(string stream, int expectedVersion, bool hardDelete, UserCredentials userCredentials = null)
+        public Task<DeleteResult> DeleteStreamAsync(string stream, long expectedVersion, bool hardDelete, UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<WriteResult> AppendToStreamAsync(string stream, int expectedVersion, params EventData[] events)
+        public Task<WriteResult> AppendToStreamAsync(string stream, long expectedVersion, params EventData[] events)
         {
             throw new NotImplementedException();
         }
 
-        public Task<WriteResult> AppendToStreamAsync(string stream, int expectedVersion, UserCredentials userCredentials, params EventData[] events)
+        public Task<WriteResult> AppendToStreamAsync(string stream, long expectedVersion, UserCredentials userCredentials, params EventData[] events)
         {
             throw new NotImplementedException();
         }
 
-        public Task<WriteResult> AppendToStreamAsync(string stream, int expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
+        public Task<WriteResult> AppendToStreamAsync(string stream, long expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<EventStoreTransaction> StartTransactionAsync(string stream, int expectedVersion, UserCredentials userCredentials = null)
+        public Task<EventStoreTransaction> StartTransactionAsync(string stream, long expectedVersion, UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
         }
@@ -65,29 +65,29 @@ namespace Eventstore.ClientAPI.Tests
             throw new NotImplementedException();
         }
 
-        public Task<EventReadResult> ReadEventAsync(string stream, int eventNumber, bool resolveLinkTos, UserCredentials userCredentials = null)
+        public Task<EventReadResult> ReadEventAsync(string stream, long eventNumber, bool resolveLinkTos, UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
         }
 
-        public void HandleReadStreamEventsForwardAsync(Func<string, int, int, Task<StreamEventsSlice>> callback)
+        public void HandleReadStreamEventsForwardAsync(Func<string, long, long, Task<StreamEventsSlice>> callback)
         {
             _readStreamEventsForwardAsync = callback;
         }
 
-        public Task<StreamEventsSlice> ReadStreamEventsForwardAsync(string stream, int start, int count, bool resolveLinkTos,
+        public Task<StreamEventsSlice> ReadStreamEventsForwardAsync(string stream, long start, int count, bool resolveLinkTos,
             UserCredentials userCredentials = null)
         {
             return _readStreamEventsForwardAsync(stream, start, count);
         }
 
-        public Task<StreamEventsSlice> ReadStreamEventsBackwardAsync(string stream, int start, int count, bool resolveLinkTos,
+        public Task<StreamEventsSlice> ReadStreamEventsBackwardAsync(string stream, long start, int count, bool resolveLinkTos,
             UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
         }
 
-        public void HandleReadAllEventsForwardAsync(Func<Position, int, bool, UserCredentials, Task<AllEventsSlice>> callback)
+        public void HandleReadAllEventsForwardAsync(Func<Position, long, bool, UserCredentials, Task<AllEventsSlice>> callback)
         {
             _readAllEventsForwardAsync = callback;
         }
@@ -115,7 +115,7 @@ namespace Eventstore.ClientAPI.Tests
             return _subscribeToStreamAsync(stream, eventAppeared, subscriptionDropped);
         }
 
-        public EventStoreStreamCatchUpSubscription SubscribeToStreamFrom(string stream, int? lastCheckpoint, bool resolveLinkTos,
+        public EventStoreStreamCatchUpSubscription SubscribeToStreamFrom(string stream, long? lastCheckpoint, bool resolveLinkTos,
             Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared, Action<EventStoreCatchUpSubscription> liveProcessingStarted = null, Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null,
             UserCredentials userCredentials = null, int readBatchSize = 500)
         {
@@ -124,7 +124,7 @@ namespace Eventstore.ClientAPI.Tests
 
         public EventStoreStreamCatchUpSubscription SubscribeToStreamFrom(
             string stream,
-            int? lastCheckpoint,
+            long? lastCheckpoint,
             CatchUpSubscriptionSettings settings,
             Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared,
             Action<EventStoreCatchUpSubscription> liveProcessingStarted = null,
@@ -182,13 +182,13 @@ namespace Eventstore.ClientAPI.Tests
             throw new NotImplementedException();
         }
 
-        public Task<WriteResult> SetStreamMetadataAsync(string stream, int expectedMetastreamVersion, StreamMetadata metadata,
+        public Task<WriteResult> SetStreamMetadataAsync(string stream, long expectedMetastreamVersion, StreamMetadata metadata,
             UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<WriteResult> SetStreamMetadataAsync(string stream, int expectedMetastreamVersion, byte[] metadata,
+        public Task<WriteResult> SetStreamMetadataAsync(string stream, long expectedMetastreamVersion, byte[] metadata,
             UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
@@ -257,7 +257,7 @@ namespace Eventstore.ClientAPI.Tests
             throw new NotImplementedException();
         }
 
-        public Task<ConditionalWriteResult> ConditionalAppendToStreamAsync(string stream, int expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
+        public Task<ConditionalWriteResult> ConditionalAppendToStreamAsync(string stream, long expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
         }
