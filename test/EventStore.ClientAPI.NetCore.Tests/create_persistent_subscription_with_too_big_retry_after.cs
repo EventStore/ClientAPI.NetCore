@@ -7,12 +7,10 @@ namespace Eventstore.ClientAPI.Tests
     [TestFixture, Category("LongRunning")]
     public class create_persistent_subscription_with_too_big_retry_after : SpecificationWithConnection
     {
- 
         protected override void When()
         {
  
         }
- 
         [Test]
         public void the_build_fails_with_argument_exception()
         {

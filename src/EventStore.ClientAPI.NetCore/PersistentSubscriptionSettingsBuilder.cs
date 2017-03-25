@@ -134,7 +134,7 @@ namespace EventStore.ClientAPI
         /// <returns>A new <see cref="PersistentSubscriptionSettingsBuilder"></see></returns>
         public PersistentSubscriptionSettingsBuilder DontTimeoutMessages()
         {
-            _timeout = TimeSpan.Zero;
+            _timeout = TimeSpan.Zero; 
             return this;
         }
 
