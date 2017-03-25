@@ -192,9 +192,9 @@ namespace EventStore.ClientAPI.Messages
     [ProtoMember(6, IsRequired = false, Name=@"commit_position", DataFormat = DataFormat.TwosComplement)]
     public readonly long? CommitPosition;
 
-    [ProtoMember(7, IsRequired = false, Name = @"current_version", DataFormat = DataFormat.TwosComplement)]
+  
+    [ProtoMember(7, IsRequired = false, Name=@"current_version", DataFormat = DataFormat.TwosComplement)]
     public readonly int? CurrentVersion;
-
     private WriteEventsCompleted() {}
   
     public WriteEventsCompleted(OperationResult result, string message, int firstEventNumber, int lastEventNumber, long? preparePosition, long? commitPosition, int? currentVersion)
