@@ -23,13 +23,15 @@ namespace EventStore.ClientAPI.Internal
         private readonly HttpAsyncClient _client;
         private ClusterMessages.MemberInfoDto[] _oldGossip;
         private TimeSpan _gossipTimeout;
+        private readonly bool _preferRandomNode;
 
         public ClusterDnsEndPointDiscoverer(ILogger log, 
                                             string clusterDns,
                                             int maxDiscoverAttempts, 
                                             int managerExternalHttpPort,
                                             GossipSeed[] gossipSeeds,
-                                            TimeSpan gossipTimeout)
+                                            TimeSpan gossipTimeout,
+                                            bool preferRandomNode)
         {
             Ensure.NotNull(log, "log");
 
@@ -39,6 +41,7 @@ namespace EventStore.ClientAPI.Internal
             _managerExternalHttpPort = managerExternalHttpPort;
             _gossipSeeds = gossipSeeds;
             _gossipTimeout = gossipTimeout;
+            _preferRandomNode = preferRandomNode;
             _client = new HttpAsyncClient(_gossipTimeout);
         }
 
@@ -80,7 +83,7 @@ namespace EventStore.ClientAPI.Internal
                 if (gossip == null || gossip.Members == null || gossip.Members.Length == 0)
                     continue;
 
-                var bestNode = TryDetermineBestNode(gossip.Members);
+                var bestNode = TryDetermineBestNode(gossip.Members, _preferRandomNode);
                 if (bestNode != null)
                 {
                     _oldGossip = gossip.Members;
@@ -207,7 +210,7 @@ namespace EventStore.ClientAPI.Internal
             return result;
         }
 
-        private NodeEndPoints? TryDetermineBestNode(IEnumerable<ClusterMessages.MemberInfoDto> members)
+        private NodeEndPoints? TryDetermineBestNode(IEnumerable<ClusterMessages.MemberInfoDto> members, bool preferRandomNode)
         {
             var notAllowedStates = new[]
             {
@@ -215,10 +218,17 @@ namespace EventStore.ClientAPI.Internal
                 ClusterMessages.VNodeState.ShuttingDown,
                 ClusterMessages.VNodeState.Shutdown
             };
-            var node = members.Where(x => x.IsAlive)
+            var nodes = members.Where(x => x.IsAlive)
                               .Where(x => !notAllowedStates.Contains(x.State))
                               .OrderByDescending(x => x.State)
-                              .FirstOrDefault();
+                              .ToArray();
+            if (preferRandomNode)
+            {
+                RandomShuffle(nodes, 0, nodes.Length - 1);
+            }
+
+            var node = nodes.FirstOrDefault();
+
             if (node == null)
             {
                 //_log.Info("Unable to locate suitable node. Gossip info:\n{0}.", string.Join("\n", members.Select(x => x.ToString())));
