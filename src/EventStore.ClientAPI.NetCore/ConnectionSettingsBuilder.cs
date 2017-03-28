@@ -40,7 +40,7 @@ namespace EventStore.ClientAPI
         private int _gossipExternalHttpPort = Consts.DefaultClusterManagerExternalHttpPort;
         private TimeSpan _gossipTimeout = TimeSpan.FromSeconds(1);
         private GossipSeed[] _gossipSeeds;
-
+        private bool _preferRandomNode;
 
         internal ConnectionSettingsBuilder()
         {
@@ -344,6 +344,16 @@ namespace EventStore.ClientAPI
         }
 
         /// <summary>
+        /// Whether to randomly choose a node that's alive from the known nodes.
+        /// </summary>
+        /// <returns>A <see ref="DnsClusterSettingsBuilder" /> for further configuration.</returns>
+        public ConnectionSettingsBuilder PreferRandomNode()
+        {
+            _preferRandomNode = true;
+            return this;
+        }
+
+        /// <summary>
         /// Sets the well-known port on which the cluster gossip is taking place.
         /// 
         /// If you are using the commercial edition of Event Store HA, with Manager nodes in
@@ -441,7 +451,8 @@ namespace EventStore.ClientAPI
                                           _gossipSeeds,
                                           _maxDiscoverAttempts,
                                           _gossipExternalHttpPort,
-                                          _gossipTimeout);
+                                          _gossipTimeout,
+                                          _preferRandomNode);
         }
     }
 }
