@@ -1251,7 +1251,31 @@ namespace EventStore.ClientAPI.Messages
             }
         }
 
-
+  [ProtoContract(Name=@"IdentifyClient")]
+  public partial class IdentifyClient
+  {
+    [ProtoMember(1, IsRequired = true, Name=@"version", DataFormat = DataFormat.TwosComplement)]
+    public readonly int Version;
+  
+    [ProtoMember(2, IsRequired = false, Name=@"connection_name", DataFormat = DataFormat.Default)]
+    public readonly string ConnectionName;
+  
+    private IdentifyClient() {}
+  
+    public IdentifyClient(int version, string connectionName)
+    {
+        Version = version;
+        ConnectionName = connectionName;
+    }
+  }
+  
+  [ProtoContract(Name=@"ClientIdentified")]
+  public partial class ClientIdentified
+  {
+    public ClientIdentified()
+    {
+    }
+  }
         [ProtoContract(Name = @"OperationResult")]
         public enum OperationResult
         {
