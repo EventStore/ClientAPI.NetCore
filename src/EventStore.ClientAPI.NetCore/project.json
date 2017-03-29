@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1-alpha-*",
+  "version": "4.0.0-alpha-*",
   "authors": [
     "Event Store LLP"
   ],
@@ -14,7 +14,7 @@
       "eventstore"
     ],
     "repository": {
-      "type": "git","url": "https://github.com/EventStore/"
+      "type": "git","url": "https://github.com/EventStore/ClientAPI.NetCore"
     }
   },
   "buildOptions": {
