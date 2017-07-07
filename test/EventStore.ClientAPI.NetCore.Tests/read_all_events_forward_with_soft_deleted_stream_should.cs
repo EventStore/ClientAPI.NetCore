@@ -14,7 +14,6 @@ namespace Eventstore.ClientAPI.Tests
     {
         private EventData[] _testEvents;
         private string _stream = "read_all_events_forward_with_soft_deleted_stream_should";
-        private Position _position;
 
         [OneTimeTearDown]
         public void Cleanup()
@@ -32,7 +31,7 @@ namespace Eventstore.ClientAPI.Tests
                 "$all", ExpectedVersion.Any, StreamMetadata.Build().SetReadRole(SystemRoles.All),
                 new UserCredentials(SystemUsers.Admin, SystemUsers.DefaultAdminPassword))
             .Wait();
-            _position = _conn.ReadAllEventsBackwardAsync(Position.End, 1, false).Result.NextPosition;
+
             _testEvents = Enumerable.Range(0, 20).Select(x => TestEvent.NewTestEvent(x.ToString())).ToArray();
             _conn.AppendToStreamAsync(_stream, ExpectedVersion.Any, _testEvents).Wait();
             _conn.DeleteStreamAsync(_stream, ExpectedVersion.Any).Wait();
@@ -49,15 +48,8 @@ namespace Eventstore.ClientAPI.Tests
         [Test, Category("LongRunning")]
         public void returns_all_events_including_tombstone()
         {
-            AllEventsSlice read = _conn.ReadAllEventsForwardAsync(_position, _testEvents.Length + 10, false).Result;
-            Assert.That(
-                EventDataComparer.Equal(
-                    _testEvents.ToArray(),
-                    read.Events.Skip(read.Events.Length - _testEvents.Length - 1)
-                        .Take(_testEvents.Length)
-                        .Select(x => x.Event)
-                        .ToArray()));
-            var lastEvent = read.Events.Last().Event;
+            var metadataEvents = _conn.ReadStreamEventsBackwardAsync("$$" + _stream, -1, 1, true, new UserCredentials("admin", "changeit")).Result;
+            var lastEvent = metadataEvents.Events[0].Event;
             Assert.AreEqual("$$"+ _stream, lastEvent.EventStreamId);
             Assert.AreEqual(SystemEventTypes.StreamMetadata, lastEvent.EventType);
             var metadata = StreamMetadata.FromJsonBytes(lastEvent.Data);
