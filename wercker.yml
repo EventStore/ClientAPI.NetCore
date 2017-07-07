@@ -15,9 +15,9 @@ build:
         name: install and run eventstore
         code: |
           apt-get install wget
-          wget http://download.geteventstore.com/binaries/EventStore-OSS-Ubuntu-14.04-v3.9.3.tar.gz
-          tar xfv EventStore-OSS-Ubuntu-14.04-v3.9.3.tar.gz
-          pushd ./EventStore-OSS-Ubuntu-14.04-v3.9.3
+          wget http://download.geteventstore.com/binaries/EventStore-OSS-Ubuntu-14.04-v4.0.0.tar.gz
+          tar xfv EventStore-OSS-Ubuntu-14.04-v4.0.0.tar.gz
+          pushd ./EventStore-OSS-Ubuntu-14.04-v4.0.0
           nohup ./eventstored --enable-trusted-auth --run-projections All --mem-db --log ~/logs &
           popd
 
