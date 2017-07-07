@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AssemblyName>EventStore.ClientAPI.NetCore.Tests</AssemblyName>
+    <PackageId>EventStore.ClientAPI.NetCore.Tests</PackageId>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8</PackageTargetFallback>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/EventStore.ClientAPI.NetCore/EventStore.ClientAPI.NetCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.0.2" />
+    <packagereference Include="NUnit" Version="3.6.1"></packagereference>
+    <packagereference Include="NUnit3TestAdapter" Version="3.8.0-alpha1"></packagereference>
+    
+  </ItemGroup>
+
+</Project>

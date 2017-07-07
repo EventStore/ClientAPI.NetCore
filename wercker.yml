@@ -9,38 +9,38 @@ build:
           sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list'
           apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
           apt-get update
-          apt-get install dotnet-dev-1.0.0-preview2-003156 -y
+          apt-get install dotnet-dev-1.0.1 -y
 
     - script:
         name: install and run eventstore
         code: |
           apt-get install wget
-          wget http://download.geteventstore.com/binaries/EventStore-OSS-Ubuntu-14.04-v4.0.0.tar.gz
-          tar xfv EventStore-OSS-Ubuntu-14.04-v4.0.0.tar.gz
-          pushd ./EventStore-OSS-Ubuntu-14.04-v4.0.0
+          wget http://download.geteventstore.com/binaries/EventStore-OSS-Ubuntu-14.04-v3.9.3.tar.gz
+          tar xfv EventStore-OSS-Ubuntu-14.04-v3.9.3.tar.gz
+          pushd ./EventStore-OSS-Ubuntu-14.04-v3.9.3
           nohup ./eventstored --enable-trusted-auth --run-projections All --mem-db --log ~/logs &
-          popd          
-          
+          popd
+
     # Build
     - script:
         name: Build project
         code: |
           ./build.sh
-    
+
     # Run tests
     - script:
         name: Run tests
         code: |
           dotnet restore
           ./run_suppressed_tests.sh
-    
+
   after-steps:
     - script:
         name: copy log files
-        code: | 
+        code: |
           echo "contents of ~"
           ls ~
           echo "copying server logs"
-          cp -R ~/logs $WERCKER_REPORT_ARTIFACTS_DIR          
+          cp -R ~/logs $WERCKER_REPORT_ARTIFACTS_DIR
           echo "copying output"
           cp ./build.out $WERCKER_REPORT_ARTIFACTS_DIR

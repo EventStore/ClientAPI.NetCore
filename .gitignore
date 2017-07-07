@@ -2,6 +2,8 @@ bin
 obj
 .vscode
 .vs
+backup
+.idea
 project.lock.json
 *.xproj.user
 TestResult.xml
