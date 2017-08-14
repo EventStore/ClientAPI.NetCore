@@ -1,13 +1,13 @@
 using System.Linq;
-using Eventstore.ClientAPI.Tests.Helpers;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Common;
 using EventStore.ClientAPI.SystemData;
+using EventStore.Core.Tests.ClientAPI.Helpers;
 using NUnit.Framework;
 using ExpectedVersion = EventStore.ClientAPI.ExpectedVersion;
 using StreamMetadata = EventStore.ClientAPI.StreamMetadata;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning"), Ignore("Uses $all")]
     public class read_all_events_forward_with_hard_deleted_stream_should : SpecificationWithConnection

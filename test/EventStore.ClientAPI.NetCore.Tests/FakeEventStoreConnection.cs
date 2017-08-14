@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 
-namespace Eventstore.ClientAPI.Tests
-{
-    internal class FakeEventStoreConnection : IEventStoreConnection
+namespace EventStore.Core.Tests.ClientAPI
+{ 
+internal class FakeEventStoreConnection : IEventStoreConnection
     {
-        private Func<Position, long, bool, UserCredentials, Task<AllEventsSlice>> _readAllEventsForwardAsync;
-        private Func<string, long, long, Task<StreamEventsSlice>> _readStreamEventsForwardAsync;
-        private Func<string, Action<EventStoreSubscription, ResolvedEvent>, Action<EventStoreSubscription, SubscriptionDropReason, Exception>, Task<EventStoreSubscription>> _subscribeToStreamAsync;
+        private Func<Position, int, bool, UserCredentials, Task<AllEventsSlice>> _readAllEventsForwardAsync;
+        private Func<string, long, int, Task<StreamEventsSlice>> _readStreamEventsForwardAsync;
+        private Func<string, Func<EventStoreSubscription, ResolvedEvent, Task>, Action<EventStoreSubscription, SubscriptionDropReason, Exception>, Task<EventStoreSubscription>> _subscribeToStreamAsync;
 
         public void Dispose()
         {
             throw new NotImplementedException();
         }
 
-        public string ConnectionName { get; private set; }
+        public string ConnectionName { get; }
         public ConnectionSettings Settings { get { return null; } }
 
         public Task ConnectAsync()
@@ -55,6 +55,12 @@ namespace Eventstore.ClientAPI.Tests
             throw new NotImplementedException();
         }
 
+        public Task<ConditionalWriteResult> ConditionalAppendToStreamAsync(string stream, long expectedVersion, IEnumerable<EventData> events,
+            UserCredentials userCredentials = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<EventStoreTransaction> StartTransactionAsync(string stream, long expectedVersion, UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
@@ -70,7 +76,7 @@ namespace Eventstore.ClientAPI.Tests
             throw new NotImplementedException();
         }
 
-        public void HandleReadStreamEventsForwardAsync(Func<string, long, long, Task<StreamEventsSlice>> callback)
+        public void HandleReadStreamEventsForwardAsync(Func<string, long, int, Task<StreamEventsSlice>> callback)
         {
             _readStreamEventsForwardAsync = callback;
         }
@@ -87,7 +93,7 @@ namespace Eventstore.ClientAPI.Tests
             throw new NotImplementedException();
         }
 
-        public void HandleReadAllEventsForwardAsync(Func<Position, long, bool, UserCredentials, Task<AllEventsSlice>> callback)
+        public void HandleReadAllEventsForwardAsync(Func<Position, int, bool, UserCredentials, Task<AllEventsSlice>> callback)
         {
             _readAllEventsForwardAsync = callback;
         }
@@ -104,20 +110,20 @@ namespace Eventstore.ClientAPI.Tests
             throw new NotImplementedException();
         }
 
-        public void HandleSubscribeToStreamAsync(Func<string, Action<EventStoreSubscription, ResolvedEvent>, Action<EventStoreSubscription, SubscriptionDropReason, Exception>, Task<EventStoreSubscription>> callback)
+        public void HandleSubscribeToStreamAsync(Func<string, Func<EventStoreSubscription, ResolvedEvent, Task>, Action<EventStoreSubscription, SubscriptionDropReason, Exception>, Task<EventStoreSubscription>> callback)
         {
             _subscribeToStreamAsync = callback;
         }
 
-        public Task<EventStoreSubscription> SubscribeToStreamAsync(string stream, bool resolveLinkTos, Action<EventStoreSubscription, ResolvedEvent> eventAppeared, Action<EventStoreSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null,
+        public Task<EventStoreSubscription> SubscribeToStreamAsync(string stream, bool resolveLinkTos, Func<EventStoreSubscription, ResolvedEvent, Task> eventAppeared, Action<EventStoreSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null,
             UserCredentials userCredentials = null)
         {
             return _subscribeToStreamAsync(stream, eventAppeared, subscriptionDropped);
         }
 
         public EventStoreStreamCatchUpSubscription SubscribeToStreamFrom(string stream, long? lastCheckpoint, bool resolveLinkTos,
-            Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared, Action<EventStoreCatchUpSubscription> liveProcessingStarted = null, Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null,
-            UserCredentials userCredentials = null, int readBatchSize = 500)
+            Func<EventStoreCatchUpSubscription, ResolvedEvent, Task> eventAppeared, Action<EventStoreCatchUpSubscription> liveProcessingStarted = null, Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null,
+            UserCredentials userCredentials = null, int readBatchSize = 500, string subscriptionName = "")
         {
             throw new NotImplementedException();
         }
@@ -126,7 +132,7 @@ namespace Eventstore.ClientAPI.Tests
             string stream,
             long? lastCheckpoint,
             CatchUpSubscriptionSettings settings,
-            Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared,
+            Func<EventStoreCatchUpSubscription, ResolvedEvent, Task> eventAppeared,
             Action<EventStoreCatchUpSubscription> liveProcessingStarted = null,
             Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null,
             UserCredentials userCredentials = null)
@@ -134,22 +140,24 @@ namespace Eventstore.ClientAPI.Tests
             throw new NotImplementedException();
         }
 
-        public Task<EventStoreSubscription> SubscribeToAllAsync(bool resolveLinkTos, Action<EventStoreSubscription, ResolvedEvent> eventAppeared, Action<EventStoreSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null,
+        public Task<EventStoreSubscription> SubscribeToAllAsync(bool resolveLinkTos, Func<EventStoreSubscription, ResolvedEvent, Task> eventAppeared, Action<EventStoreSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null,
             UserCredentials userCredentials = null)
         {
             throw new NotImplementedException();
         }
 
         public EventStorePersistentSubscriptionBase ConnectToPersistentSubscription(string stream, string groupName,
-            Action<EventStorePersistentSubscriptionBase, ResolvedEvent> eventAppeared, Action<EventStorePersistentSubscriptionBase, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null, int bufferSize = 10,
+            Func<EventStorePersistentSubscriptionBase, ResolvedEvent, Task> eventAppeared, Action<EventStorePersistentSubscriptionBase, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null, int bufferSize = 10,
             bool autoAck = true)
         {
             throw new NotImplementedException();
         }
 
-        public EventStoreAllCatchUpSubscription SubscribeToAllFrom(Position? lastCheckpoint, bool resolveLinkTos, Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared,
+        public EventStoreAllCatchUpSubscription SubscribeToAllFrom(Position? lastCheckpoint, bool resolveLinkTos,
+            Func<EventStoreCatchUpSubscription, ResolvedEvent, Task> eventAppeared,
             Action<EventStoreCatchUpSubscription> liveProcessingStarted = null, Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null,
-            int readBatchSize = 500)
+            int readBatchSize = 500,
+            string subscriptionName = "")
         {
             throw new NotImplementedException();
         }
@@ -157,7 +165,7 @@ namespace Eventstore.ClientAPI.Tests
         public EventStoreAllCatchUpSubscription SubscribeToAllFrom(
             Position? lastCheckpoint,
             CatchUpSubscriptionSettings settings,
-            Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared,
+            Func<EventStoreCatchUpSubscription, ResolvedEvent, Task> eventAppeared,
             Action<EventStoreCatchUpSubscription> liveProcessingStarted = null,
             Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null,
             UserCredentials userCredentials = null)
@@ -252,12 +260,7 @@ namespace Eventstore.ClientAPI.Tests
             if (handler != null) handler(this, e);
         }
 
-        public Task<EventStorePersistentSubscriptionBase> ConnectToPersistentSubscriptionAsync(string stream, string groupName, Action<EventStorePersistentSubscriptionBase, ResolvedEvent> eventAppeared, Action<EventStorePersistentSubscriptionBase, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null, int bufferSize = 10, bool autoAck = true)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ConditionalWriteResult> ConditionalAppendToStreamAsync(string stream, long expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
+        public Task<EventStorePersistentSubscriptionBase> ConnectToPersistentSubscriptionAsync(string stream, string groupName, Func<EventStorePersistentSubscriptionBase, ResolvedEvent, Task> eventAppeared, Action<EventStorePersistentSubscriptionBase, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null, int bufferSize = 10, bool autoAck = true)
         {
             throw new NotImplementedException();
         }

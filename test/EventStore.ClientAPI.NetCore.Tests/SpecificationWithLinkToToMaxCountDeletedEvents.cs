@@ -3,7 +3,7 @@ using System.Text;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Common;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     public abstract class SpecificationWithLinkToToMaxCountDeletedEvents : SpecificationWithConnection
     {

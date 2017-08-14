@@ -5,7 +5,7 @@ using EventStore.ClientAPI;
 using EventStore.ClientAPI.Common;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class happy_case_catching_up_to_link_to_events_manual_ack : SpecificationWithConnection

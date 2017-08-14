@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Eventstore.ClientAPI.Tests.Helpers;
 using EventStore.ClientAPI;
+using EventStore.Core.Tests.ClientAPI.Helpers;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class read_event_stream_backward_should 

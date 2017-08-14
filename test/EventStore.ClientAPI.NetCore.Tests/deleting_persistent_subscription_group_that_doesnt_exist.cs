@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class deleting_persistent_subscription_group_that_doesnt_exist : SpecificationWithConnection

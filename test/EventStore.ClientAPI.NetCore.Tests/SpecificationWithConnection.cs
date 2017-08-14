@@ -1,9 +1,9 @@
 using System.Net;
-using Eventstore.ClientAPI.Tests.Helpers;
 using EventStore.ClientAPI;
+using EventStore.Core.Tests.ClientAPI.Helpers;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     public abstract class SpecificationWithConnection
     {

@@ -1,7 +1,7 @@
 ﻿using EventStore.ClientAPI;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class read_event_of_linkto_to_deleted_event : SpecificationWithLinkToToDeletedEvents

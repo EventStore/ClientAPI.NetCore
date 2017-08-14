@@ -1,9 +1,9 @@
 ﻿using System;
-using Eventstore.ClientAPI.Tests.Helpers;
 using EventStore.ClientAPI;
+using EventStore.Core.Tests.ClientAPI.Helpers;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture(TcpType.Normal), TestFixture(TcpType.Ssl), Category("LongRunning")]
     public class event_store_connection_should

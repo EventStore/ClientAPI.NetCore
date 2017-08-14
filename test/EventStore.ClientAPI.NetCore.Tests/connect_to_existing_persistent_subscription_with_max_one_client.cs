@@ -3,7 +3,7 @@ using EventStore.ClientAPI;
 using EventStore.ClientAPI.ClientOperations;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class connect_to_existing_persistent_subscription_with_max_one_client : SpecificationWithConnection

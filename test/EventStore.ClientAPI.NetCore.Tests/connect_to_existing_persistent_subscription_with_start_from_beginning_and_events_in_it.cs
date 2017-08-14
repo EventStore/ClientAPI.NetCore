@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class connect_to_existing_persistent_subscription_with_start_from_beginning_and_events_in_it : SpecificationWithConnection
@@ -50,7 +51,7 @@ namespace Eventstore.ClientAPI.Tests
                 DefaultData.AdminCredentials);
         }
 
-        private void HandleEvent(EventStorePersistentSubscriptionBase sub, ResolvedEvent resolvedEvent)
+        private Task HandleEvent(EventStorePersistentSubscriptionBase sub, ResolvedEvent resolvedEvent)
         {
             if (!_set)
             {
@@ -58,6 +59,7 @@ namespace Eventstore.ClientAPI.Tests
                 _firstEvent = resolvedEvent;
                 _resetEvent.Set();
             }
+            return Task.CompletedTask;
         }
 
         [Test]

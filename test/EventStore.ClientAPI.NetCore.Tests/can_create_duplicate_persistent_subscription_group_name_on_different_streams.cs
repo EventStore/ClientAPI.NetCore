@@ -2,7 +2,7 @@
 using EventStore.ClientAPI;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class can_create_duplicate_persistent_subscription_group_name_on_different_streams : SpecificationWithConnection

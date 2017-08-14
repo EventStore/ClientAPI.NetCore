@@ -3,7 +3,7 @@ using EventStore.ClientAPI.SystemData;
 using EventStore.ClientAPI.UserManagement;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.UserManagement
+namespace EventStore.Core.Tests.ClientAPI.UserManagement
 {
     public class creating_a_user : TestWithNode 
     {

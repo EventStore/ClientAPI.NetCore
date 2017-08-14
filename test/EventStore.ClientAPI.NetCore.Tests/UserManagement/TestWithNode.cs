@@ -1,11 +1,11 @@
 using System;
-using Eventstore.ClientAPI.Tests.Helpers;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Common.Log;
 using EventStore.ClientAPI.UserManagement;
+using EventStore.Core.Tests.ClientAPI.Helpers;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.UserManagement
+namespace EventStore.Core.Tests.ClientAPI.UserManagement
 {
     [Category("LongRunning")]
     public class TestWithNode 

@@ -1,4 +1,4 @@
-﻿namespace Eventstore.ClientAPI.Tests.Helpers
+﻿namespace EventStore.Core.Tests.ClientAPI.Helpers
 {
     public static class SystemStreams
     {

@@ -1,7 +1,7 @@
 ﻿using EventStore.ClientAPI.Exceptions;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.Security
+namespace EventStore.Core.Tests.ClientAPI.Security
 {
     [TestFixture, Category("LongRunning"), Category("Network")]
     public class subscribe_to_stream_security : AuthenticationTestBase

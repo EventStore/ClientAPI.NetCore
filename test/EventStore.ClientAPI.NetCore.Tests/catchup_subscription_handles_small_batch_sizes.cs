@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using Eventstore.ClientAPI.Tests.Helpers;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
+using EventStore.Core.Tests.ClientAPI.Helpers;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Ignore("Very long running")]
     [Category("LongRunning")]

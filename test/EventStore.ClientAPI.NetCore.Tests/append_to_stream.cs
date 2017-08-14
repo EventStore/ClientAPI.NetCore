@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Eventstore.ClientAPI.Tests.Helpers;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Exceptions;
+using EventStore.Core.Tests.ClientAPI.Helpers;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture]
     public class append_to_stream 

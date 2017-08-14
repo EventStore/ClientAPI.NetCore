@@ -1,9 +1,8 @@
-﻿using Eventstore.ClientAPI.Tests.Helpers;
-using EventStore.ClientAPI;
+﻿using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.Security
+namespace EventStore.Core.Tests.ClientAPI.Security
 {
     [TestFixture, Category("LongRunning"), Category("Network")]
     public class overriden_system_stream_security_for_all : AuthenticationTestBase

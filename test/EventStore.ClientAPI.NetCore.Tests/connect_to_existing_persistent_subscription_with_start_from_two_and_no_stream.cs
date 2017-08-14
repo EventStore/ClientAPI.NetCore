@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class connect_to_existing_persistent_subscription_with_start_from_two_and_no_stream : SpecificationWithConnection
@@ -45,12 +46,15 @@ namespace Eventstore.ClientAPI.Tests
 
         }
 
-        private void HandleEvent(EventStorePersistentSubscriptionBase sub, ResolvedEvent resolvedEvent)
+        private Task HandleEvent(EventStorePersistentSubscriptionBase sub, ResolvedEvent resolvedEvent)
         {
-            if (_set) return;
-            _set = true;
-            _firstEvent = resolvedEvent;
-            _resetEvent.Set();
+            if (!_set)
+            {
+                _set = true;
+                _firstEvent = resolvedEvent;
+                _resetEvent.Set();
+            }
+            return Task.CompletedTask;
         }
 
         [Test]

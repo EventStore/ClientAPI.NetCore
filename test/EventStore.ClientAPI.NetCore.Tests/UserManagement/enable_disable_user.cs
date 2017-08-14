@@ -2,7 +2,7 @@
 using EventStore.ClientAPI.SystemData;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.UserManagement
+namespace EventStore.Core.Tests.ClientAPI.UserManagement
 {
     public class enable_disable_user : TestWithUser
     {

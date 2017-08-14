@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class connect_to_non_existing_persistent_subscription_with_permissions : SpecificationWithConnection
@@ -15,7 +16,11 @@ namespace Eventstore.ClientAPI.Tests
                 _conn.ConnectToPersistentSubscription(
                     "nonexisting2",
                     "foo",
-                    (sub, e) => Console.Write("appeared"),
+                    (sub, e) =>
+                    {
+                        Console.Write("appeared");
+                        return Task.CompletedTask;
+                    },
                     (sub, reason, ex) =>
                     {
                     });

@@ -1,9 +1,8 @@
 ﻿using System;
 using EventStore.ClientAPI.SystemData;
-using EventStore.ClientAPI.UserManagement;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.UserManagement
+namespace EventStore.Core.Tests.ClientAPI.UserManagement
 {
     [TestFixture]
     public class updating_a_user : TestWithNode

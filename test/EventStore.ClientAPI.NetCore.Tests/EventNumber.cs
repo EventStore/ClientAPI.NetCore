@@ -1,4 +1,4 @@
-﻿namespace Eventstore.ClientAPI.Tests
+﻿namespace EventStore.Core.Tests.ClientAPI
 {
     public static class EventNumber
     {

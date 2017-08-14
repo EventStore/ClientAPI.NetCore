@@ -12,7 +12,7 @@ using NUnit.Framework;
 using ClientMessage = EventStore.ClientAPI.Messages.ClientMessage;
 using ResolvedEvent = EventStore.ClientAPI.ResolvedEvent;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture]
     public class catch_up_subscription_handles_errors
@@ -47,6 +47,7 @@ namespace Eventstore.ClientAPI.Tests
                 {
                     _raisedEvents.Add(ev);
                     _raisedEventEvent.Set();
+                    return Task.CompletedTask;
                 },
                 subscription =>
                 {
@@ -81,7 +82,7 @@ namespace Eventstore.ClientAPI.Tests
 
         private void AssertStartFailsAndDropsSubscriptionWithException(Exception expectedException)
         {
-            Assert.That(() => _subscription.Start().Wait(TimeoutMs), Throws.TypeOf<AggregateException>());
+            Assert.That(() => _subscription.StartAsync().Wait(TimeoutMs), Throws.TypeOf<AggregateException>());
             Assert.That(_isDropped);
             Assert.That(_dropReason, Is.EqualTo(SubscriptionDropReason.CatchUpError));
             Assert.That(_dropException, Is.SameAs(expectedException));
@@ -312,7 +313,7 @@ namespace Eventstore.ClientAPI.Tests
                 return taskCompletionSource.Task;
             });
 
-            var task = _subscription.Start();
+            var task = _subscription.StartAsync();
 
             Assert.That(task.Status, Is.Not.EqualTo(TaskStatus.RanToCompletion));
             
@@ -353,7 +354,7 @@ namespace Eventstore.ClientAPI.Tests
                 return taskCompletionSource.Task;
             });
 
-            Assert.That(_subscription.Start().Wait(TimeoutMs));
+            Assert.That(_subscription.StartAsync().Wait(TimeoutMs));
             Assert.That(_raisedEvents.Count, Is.EqualTo(0));
 
             Assert.That(innerSubscriptionDrop, Is.Not.Null);
@@ -414,7 +415,7 @@ namespace Eventstore.ClientAPI.Tests
             Assert.That(reconnectTask.Wait(TimeoutMs));
         }
 
-        private static VolatileEventStoreSubscription CreateVolatileSubscription(Action<EventStoreSubscription, ResolvedEvent> raise, Action<EventStoreSubscription, SubscriptionDropReason, Exception> drop, int? lastEventNumber)
+        private static VolatileEventStoreSubscription CreateVolatileSubscription(Func<EventStoreSubscription, ResolvedEvent, Task> raise, Action<EventStoreSubscription, SubscriptionDropReason, Exception> drop, int? lastEventNumber)
         {
             return new VolatileEventStoreSubscription(new VolatileSubscriptionOperation(new NoopLogger(), new TaskCompletionSource<EventStoreSubscription>(), StreamId, false, null, raise, drop, false, () => null), StreamId, -1, lastEventNumber);
         }

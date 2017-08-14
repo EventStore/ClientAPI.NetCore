@@ -1,7 +1,7 @@
 ﻿using EventStore.ClientAPI.SystemData;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.UserManagement
+namespace EventStore.Core.Tests.ClientAPI.UserManagement
 {
     public class get_current_user : TestWithNode
     {

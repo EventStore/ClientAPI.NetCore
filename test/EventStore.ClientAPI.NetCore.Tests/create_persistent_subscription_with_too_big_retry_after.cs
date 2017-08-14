@@ -2,7 +2,7 @@ using System;
 using EventStore.ClientAPI;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class create_persistent_subscription_with_too_big_retry_after : SpecificationWithConnection

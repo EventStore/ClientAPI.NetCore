@@ -1,7 +1,7 @@
 ﻿using EventStore.ClientAPI;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.Helpers
+namespace EventStore.Core.Tests.ClientAPI.Helpers
 {
     internal class StreamWriter
     {

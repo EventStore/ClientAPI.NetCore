@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class a_nak_in_subscription_handler_in_autoack_mode_drops_the_subscription : SpecificationWithConnection
@@ -48,7 +49,7 @@ namespace Eventstore.ClientAPI.Tests
 
         }
 
-        private static void HandleEvent(EventStorePersistentSubscriptionBase sub, ResolvedEvent resolvedEvent)
+        private static Task HandleEvent(EventStorePersistentSubscriptionBase sub, ResolvedEvent resolvedEvent)
         {
             throw new Exception("test");
         }

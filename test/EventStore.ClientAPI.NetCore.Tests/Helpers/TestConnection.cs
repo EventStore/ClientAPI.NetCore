@@ -4,12 +4,11 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using EventStore.ClientAPI;
-using EventStore.ClientAPI.Common.Log;
 using EventStore.ClientAPI.Internal;
 using EventStore.ClientAPI.SystemData;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.Helpers
+namespace EventStore.Core.Tests.ClientAPI.Helpers
 {
     public static class TestConnection
     {

@@ -1,6 +1,6 @@
 ﻿using EventStore.ClientAPI;
 
-namespace Eventstore.ClientAPI.Tests.Helpers
+namespace EventStore.Core.Tests.ClientAPI.Helpers
 {
     internal class TailWriter
     {

@@ -2,7 +2,7 @@
 using EventStore.ClientAPI.SystemData;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.SystemData
+namespace EventStore.Core.Tests.ClientAPI.SystemData
 {
     [TestFixture]
     public class clientapi_tcp_package

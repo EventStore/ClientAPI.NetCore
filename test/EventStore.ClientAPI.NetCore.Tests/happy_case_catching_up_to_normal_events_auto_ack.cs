@@ -3,7 +3,7 @@ using System.Threading;
 using EventStore.ClientAPI;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class happy_case_catching_up_to_normal_events_auto_ack : SpecificationWithConnection

@@ -3,7 +3,7 @@ using EventStore.ClientAPI.Exceptions;
 using EventStore.ClientAPI.SystemData;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests.Security
+namespace EventStore.Core.Tests.ClientAPI.Security
 {
     [TestFixture, Category("LongRunning"), Category("Network")]
     public class overriden_user_stream_security : AuthenticationTestBase

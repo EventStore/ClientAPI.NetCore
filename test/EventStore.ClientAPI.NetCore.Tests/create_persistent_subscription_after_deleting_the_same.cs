@@ -3,7 +3,7 @@ using System.Text;
 using EventStore.ClientAPI;
 using NUnit.Framework;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
     public class create_persistent_subscription_after_deleting_the_same : SpecificationWithConnection

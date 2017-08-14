@@ -1,7 +1,7 @@
 ﻿using System;
 using EventStore.ClientAPI.SystemData;
 
-namespace Eventstore.ClientAPI.Tests.UserManagement
+namespace EventStore.Core.Tests.ClientAPI.UserManagement
 {
     public class TestWithUser : TestWithNode
     {

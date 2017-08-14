@@ -5,7 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using EventStore.ClientAPI.SystemData;
 
-namespace Eventstore.ClientAPI.Tests
+namespace EventStore.Core.Tests.ClientAPI
 {
     public class DefaultData
     {
