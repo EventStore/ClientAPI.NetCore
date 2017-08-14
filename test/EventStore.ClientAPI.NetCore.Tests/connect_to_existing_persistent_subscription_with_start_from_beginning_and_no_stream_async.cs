@@ -43,7 +43,7 @@ namespace EventStore.Core.Tests.ClientAPI
 
         private Task HandleEvent(EventStorePersistentSubscriptionBase sub, ResolvedEvent resolvedEvent)
         {
-            if (_set)
+            if (!_set)
             {
                 _set = true;
                 _firstEvent = resolvedEvent;

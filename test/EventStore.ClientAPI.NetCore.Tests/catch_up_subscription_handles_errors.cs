@@ -288,22 +288,22 @@ namespace EventStore.Core.Tests.ClientAPI
         {
             var finalEvent = new ManualResetEventSlim();
             int callCount = 0;
-            _connection.HandleReadStreamEventsForwardAsync((stream, start, max) =>
+            _connection.HandleReadStreamEventsForwardAsync(async (stream, start, max) =>
             {
                 callCount++;
-
-                var taskCompletionSource = new TaskCompletionSource<StreamEventsSlice>();
+                await Task.Yield();
+                StreamEventsSlice result = null;
                 if (callCount == 1)
                 {
-                    taskCompletionSource.SetResult(CreateStreamEventsSlice(isEnd: true));
+                    result = CreateStreamEventsSlice(isEnd: true);
                 }
                 else if (callCount == 2)
                 {
-                    taskCompletionSource.SetResult(CreateStreamEventsSlice(fromEvent:1, isEnd: true));
+                    result = CreateStreamEventsSlice(fromEvent:1, isEnd: true);
                     Assert.That(finalEvent.Wait(TimeoutMs));
                 }
                 
-                return taskCompletionSource.Task;
+                return result;
             });
 
             _connection.HandleSubscribeToStreamAsync((stream, raise, drop) =>
