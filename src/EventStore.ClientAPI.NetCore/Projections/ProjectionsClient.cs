@@ -53,7 +53,7 @@ namespace EventStore.ClientAPI.Projections
         public Task CreateContinuous(IPEndPoint endPoint, string name, string query, bool trackEmitted, UserCredentials userCredentials = null)
         {
             return SendPost(endPoint.ToHttpUrl("/projections/continuous?name={0}&type=JS&emit=1&trackemittedstreams={1}", name, trackEmitted),
-                              query, userCredentials, HttpStatusCode.Created);
+                            query, userCredentials, HttpStatusCode.Created);
         }
 
         [Obsolete("Use 'Task<List<ProjectionDetails>> ListAll' instead")]

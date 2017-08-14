@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI.ClientOperations;
 using EventStore.ClientAPI.Common.Utils;
 using EventStore.ClientAPI.Exceptions;
-using EventStore.ClientAPI.Messages;
 using EventStore.ClientAPI.SystemData;
 using EventStore.ClientAPI.Transport.Tcp;
+using EventStore.ClientAPI.Messages;
 
 namespace EventStore.ClientAPI.Internal
 {
@@ -122,14 +122,12 @@ namespace EventStore.ClientAPI.Internal
                 if (t.IsFaulted)
                 {
                     EnqueueMessage(new CloseConnectionMessage("Failed to resolve TCP end point to which to connect.", t.Exception));
-                    if (completionTask != null)
-                        completionTask.SetException(new CannotEstablishConnectionException("Cannot resolve target end point.", t.Exception));
+                    completionTask?.SetException(new CannotEstablishConnectionException("Cannot resolve target end point.", t.Exception));
                 }
                 else
                 {
                     EnqueueMessage(new EstablishTcpConnectionMessage(t.Result));
-                    if (completionTask != null)
-                        completionTask.SetResult(null);
+                    completionTask?.SetResult(null);
                 }
             });
         }
@@ -324,7 +322,7 @@ namespace EventStore.ClientAPI.Internal
                     }
                     if (_connectingPhase == ConnectingPhase.Identification && _stopwatch.Elapsed - _identifyInfo.TimeStamp >= _settings.OperationTimeout)
                     {
-                        string msg = "Timed out waiting for client to be identified";
+                        const string msg = "Timed out waiting for client to be identified";
                         LogDebug(msg);
                         CloseTcpConnection(msg);
                     }

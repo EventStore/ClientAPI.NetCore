@@ -34,15 +34,15 @@ namespace EventStore.ClientAPI
         /// Endpoints for seeding gossip if not using DNS.
         /// </summary>
         public readonly GossipSeed[] GossipSeeds;
-        
+
         /// <summary>
         /// Timeout for cluster gossip.
         /// </summary>
         public TimeSpan GossipTimeout;
 
-        ///<summary>
-        ///Prefer a randomly selected node
-        ///</summary>
+        /// <summary>
+        /// Prefer a randomly selected node. 
+        /// </summary>
         public bool PreferRandomNode;
 
         /// <summary>

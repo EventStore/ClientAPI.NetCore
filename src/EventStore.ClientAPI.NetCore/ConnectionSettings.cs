@@ -122,10 +122,10 @@ namespace EventStore.ClientAPI
         public readonly TimeSpan GossipTimeout;
 
         /// <summary>
-        /// Whether to randomly choose a node that is alive from known nodes
+        /// Whether to randomly choose a node that's alive from the known nodes. 
         /// </summary>
         public readonly bool PreferRandomNode;
-        
+
         /// <summary>
         /// The interval after which a client will time out during connection.
         /// </summary>

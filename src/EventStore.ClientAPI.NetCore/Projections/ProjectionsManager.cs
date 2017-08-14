@@ -290,8 +290,7 @@ namespace EventStore.ClientAPI.Projections
         /// <returns>A task representing the operation.</returns>
         public Task DeleteAsync(string name, UserCredentials userCredentials = null)
         {
-            Ensure.NotNullOrEmpty(name, "name");
-            return _client.Delete(_httpEndPoint, name, false, userCredentials);
+            return DeleteAsync(name, false, userCredentials);
         }
 
         /// <summary>

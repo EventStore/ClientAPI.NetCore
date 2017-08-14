@@ -86,7 +86,7 @@ namespace EventStore.ClientAPI.Messages
 
             private EventRecord() { }
 
-            public EventRecord(string eventStreamId, int eventNumber, byte[] eventId, string eventType, int dataContentType, int metadataContentType, byte[] data, byte[] metadata, long? created, long? createdEpoch)
+            public EventRecord(string eventStreamId, long eventNumber, byte[] eventId, string eventType, int dataContentType, int metadataContentType, byte[] data, byte[] metadata, long? created, long? createdEpoch)
             {
                 EventStreamId = eventStreamId;
                 EventNumber = eventNumber;
