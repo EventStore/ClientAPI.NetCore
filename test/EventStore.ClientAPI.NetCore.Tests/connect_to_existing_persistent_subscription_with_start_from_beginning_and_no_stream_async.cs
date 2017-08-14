@@ -21,7 +21,7 @@ namespace EventStore.Core.Tests.ClientAPI
         private readonly Guid _id = Guid.NewGuid();
         private bool _set = false;
 
-        private const string _group = "startinbeginning1";
+        private const string _group = "startinbeginning4";
 
         protected override void Given()
         {

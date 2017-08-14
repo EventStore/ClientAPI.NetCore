@@ -22,7 +22,7 @@ namespace EventStore.Core.Tests.ClientAPI
         private List<Guid> _ids = new List<Guid>();
         private bool _set = false;
 
-        private const string _group = "startinbeginning1";
+        private const string _group = "startinbeginning2";
 
         protected override void Given()
         {
