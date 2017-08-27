@@ -1,2 +1,3 @@
-(New-Object Net.WebClient).DownloadFile('http://download.geteventstore.com/binaries/EventStore-OSS-Win-v4.0.2.zip','%TEMP%\eventstore.zip');(new-object -com shell.application).namespace('%TEMP%\EventStore').CopyHere((new-object -com shell.application).namespace('%TEMP%\Tools\eventstore.zip').Items(),16)
-start-process -NoNewWindow %TEMP%\EventStore\EventStore.ClusterNode.exe --memdb --run-projections ALL
+(New-Object Net.WebClient).DownloadFile('http://download.geteventstore.com/binaries/EventStore-OSS-Win-v4.0.2.zip','c:\tools\eventstore.zip')
+7z e C:\tools\eventstore.zip -oC:\tools\EventStore
+start-process -NoNewWindow "C:\tools\EventStore\EventStore.ClusterNode.exe" "--memdb --run-projections ALL"
