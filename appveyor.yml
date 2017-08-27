@@ -1,0 +1,36 @@
+version: 4.0.2.{build}
+
+image: Visual Studio 2017
+
+install:
+  - ps: .\scripts\updateversion.ps1
+  - ps: .\scripts\installandruneventstore.ps1
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+
+configuration: Release
+
+before_build:
+  - msbuild /t:restore EventStore.ClientAPI.NetCore.sln
+
+build:
+  project:  EventStore.ClientAPI.NetCore.sln /t:pack
+
+test_script:  
+  - dotnet test EventStore.ClientAPI.NetCore.Tests/EventStore.ClientAPI.NetCore.Tests.csproj --no-build
+
+
+artifacts: 
+  - path: '*.nupkg'
+
+# deploy:
+#   provider: NuGet
+#   on:
+#     appveyor_repo_tag: true
+#   api_key: 
+#     secure: 
+#   artifact: /.*\.nupkg/
