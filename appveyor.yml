@@ -18,19 +18,17 @@ before_build:
   - msbuild /t:restore EventStore.ClientAPI.NetCore.sln
 
 build:
-  project:  EventStore.ClientAPI.NetCore.sln /t:pack
-
+    project: EventStore.ClientAPI.NetCore.sln
+    publish_nuget: true
+    verbosity: minimal
+  
 test_script:  
-  - dotnet test EventStore.ClientAPI.NetCore.Tests/EventStore.ClientAPI.NetCore.Tests.csproj --no-build
-
-
-artifacts: 
-  - path: '*.nupkg'
-
-# deploy:
-#   provider: NuGet
-#   on:
-#     appveyor_repo_tag: true
-#   api_key: 
-#     secure: 
-#   artifact: /.*\.nupkg/
+  - ps: .\scripts\appveyortest.ps1
+  
+deploy:
+  provider: NuGet
+  on:
+    appveyor_repo_tag: true
+  api_key: 
+    secure: zd6D5E28IF7m/HSA9k1GUDSzOiWhnrvQUBATrbEqA2MJVh1rDDl+4LDuv+dvioWp
+  artifact: /.*\.nupkg/
