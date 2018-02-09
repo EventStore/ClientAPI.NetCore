@@ -22,9 +22,6 @@ build:
     publish_nuget: true
     verbosity: minimal
   
-test_script:  
-  - ps: .\scripts\appveyortest.ps1
-  
 deploy:
   provider: NuGet
   on:
