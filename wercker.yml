@@ -17,9 +17,9 @@ build:
         name: install and run eventstore
         code: |
           apt-get install wget tzdata curl iproute2 -y
-          wget https://eventstore.org/downloads/EventStore-OSS-Ubuntu-14.04-v4.0.3.tar.gz
-          tar xfv EventStore-OSS-Ubuntu-14.04-v4.0.3.tar.gz
-          pushd ./EventStore-OSS-Ubuntu-14.04-v4.0.3
+          wget https://eventstore.org/downloads/EventStore-OSS-Ubuntu-14.04-v4.1.0.tar.gz
+          tar xfv EventStore-OSS-Ubuntu-14.04-v4.1.0.tar.gz
+          pushd ./EventStore-OSS-Ubuntu-14.04-v4.1.0
           nohup ./eventstored --run-projections All --mem-db --log ~/logs &
           popd
 
