@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using EventStore.ClientAPI.Common.Utils;
 using Newtonsoft.Json.Linq;
-
 namespace EventStore.ClientAPI
 {
     /// <summary>

@@ -37,7 +37,7 @@ namespace EventStore.ClientAPI
         }
 
         /// <summary>
-        /// Creates a new <see cref="IEventStoreConnection"/> to single node using the <see cref="ConnectionSettings"/> overriding them with values provided via the connectionstring
+        /// Creates a new <see cref="IEventStoreConnection"/> to single node using default <see cref="ConnectionSettings"/> provided via a connectionstring
         /// </summary>
         /// <param name="connectionName">Optional name of connection (will be generated automatically, if not provided)</param>
         /// <param name="builder">Pre-populated settings builder, optional. If not specified, a new builder will be created.</param>
