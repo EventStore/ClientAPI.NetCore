@@ -16,7 +16,7 @@ namespace EventStore.Core.Tests.ClientAPI
                 _conn.ConnectToPersistentSubscriptionAsync(
                      "nonexisting2",
                      "foo",
-                     (sub, e) =>
+                     (sub, e, i) =>
                      {
                          Console.Write("appeared");
                          return Task.CompletedTask;
