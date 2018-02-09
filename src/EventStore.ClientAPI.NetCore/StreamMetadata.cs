@@ -48,7 +48,7 @@ namespace EventStore.ClientAPI
         public IEnumerable<KeyValuePair<string, string>> CustomMetadataAsRawJsons
         {
             get { return _customMetadata.Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())); }
-        }
+        } 
 
         private readonly IDictionary<string, JToken> _customMetadata;
 
@@ -70,7 +70,7 @@ namespace EventStore.ClientAPI
             TruncateBefore = truncateBefore;
             CacheControl = cacheControl;
             Acl = acl;
-            _customMetadata = customMetadata ?? Empty.CustomStreamMetadata;
+            _customMetadata = customMetadata ?? Empty.CustomStreamMetadata;  
         }
 
         /// <summary>
@@ -104,10 +104,10 @@ namespace EventStore.ClientAPI
         {
             if(Acl == null)
                 return new StreamMetadataBuilder(
-                    MaxCount,
-                    MaxAge,
-                    TruncateBefore,
-                    CacheControl,
+                    MaxCount, 
+                    MaxAge, 
+                    TruncateBefore, 
+                    CacheControl, 
                     customMetadata: _customMetadata);
             return new StreamMetadataBuilder(
                 MaxCount,
@@ -429,7 +429,7 @@ namespace EventStore.ClientAPI
         {
             if (reader.TokenType != type)
                 throw new Exception("Invalid JSON");
-        }
+        } 
 
         private static void Check(bool read, JsonTextReader reader)
         {

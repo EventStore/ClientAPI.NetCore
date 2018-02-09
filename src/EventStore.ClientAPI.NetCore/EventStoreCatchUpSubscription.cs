@@ -430,7 +430,7 @@ namespace EventStore.ClientAPI
         private async Task<bool> ReadEventsCallbackAsync(AllEventsSlice slice, long? lastCommitPosition)
         {
             bool shouldStopOrDone = ShouldStop || await ProcessEventsAsync(lastCommitPosition, slice).ConfigureAwait(false);
-            if (shouldStopOrDone && Verbose)
+            if(shouldStopOrDone && Verbose)
             {
                 Log.Debug(
                     "Catch-up Subscription {0} to {1}: finished reading events, nextReadPosition = {2}.",
@@ -534,7 +534,7 @@ namespace EventStore.ClientAPI
         protected override Task ReadEventsTillAsync(IEventStoreConnection connection, bool resolveLinkTos, UserCredentials userCredentials,
             long? lastCommitPosition, long? lastEventNumber) =>
             ReadEventsInternalAsync(connection, resolveLinkTos, userCredentials, lastEventNumber);
-
+        
         private async Task ReadEventsInternalAsync(IEventStoreConnection connection, bool resolveLinkTos,
                        UserCredentials userCredentials, long? lastEventNumber)
         {
