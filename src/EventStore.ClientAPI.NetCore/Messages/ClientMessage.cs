@@ -1037,12 +1037,16 @@ namespace EventStore.ClientAPI.Messages
             [ProtoMember(1, IsRequired = true, Name = @"event", DataFormat = DataFormat.Default)]
             public readonly ResolvedIndexedEvent Event;
 
-            private PersistentSubscriptionStreamEventAppeared() { }
-
-            public PersistentSubscriptionStreamEventAppeared(ResolvedIndexedEvent @event)
-            {
-                Event = @event;
-            }
+    		[ProtoMember(2, IsRequired = false, Name=@"retryCount", DataFormat = DataFormat.TwosComplement)]
+    		public readonly int? RetryCount;
+  
+    		private PersistentSubscriptionStreamEventAppeared() {}
+  
+		    public PersistentSubscriptionStreamEventAppeared(ResolvedIndexedEvent @event, int? retryCount)
+		    {
+		        Event = @event;
+		        RetryCount = retryCount;
+		    }
         }
 
         [ProtoContract(Name = @"SubscribeToStream")]
