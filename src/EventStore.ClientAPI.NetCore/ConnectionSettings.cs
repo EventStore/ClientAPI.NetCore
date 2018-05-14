@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using EventStore.ClientAPI.Common.Utils;
 using EventStore.ClientAPI.SystemData;
 
@@ -18,6 +19,11 @@ namespace EventStore.ClientAPI
         /// The default <see cref="ConnectionSettings"></see>.
         /// </summary>
         public static ConnectionSettings Default { get { return DefaultSettings.Value; } }
+
+        /// <summary>
+        /// Allows overriding the HTTPClients <see cref="HttpClientHandler"/>
+        /// </summary>
+        public HttpClientHandler CustomHttpClientHandler { get; set; }
 
         /// <summary>
         /// Creates a new set of <see cref="ConnectionSettings"/>.
@@ -122,7 +128,7 @@ namespace EventStore.ClientAPI
         public readonly TimeSpan GossipTimeout;
 
         /// <summary>
-        /// Whether to randomly choose a node that's alive from the known nodes. 
+        /// Whether to randomly choose a node that's alive from the known nodes.
         /// </summary>
         public readonly bool PreferRandomNode;
 
@@ -151,10 +157,11 @@ namespace EventStore.ClientAPI
                                     TimeSpan clientConnectionTimeout,
                                     string clusterDns,
                                     GossipSeed[] gossipSeeds,
-                                    int maxDiscoverAttempts, 
-                                    int externalGossipPort, 
+                                    int maxDiscoverAttempts,
+                                    int externalGossipPort,
                                     TimeSpan gossipTimeout,
-                                    bool preferRandomNode)
+                                    bool preferRandomNode,
+                                    HttpClientHandler connectionSettingsCustomHttpClientHandler)
         {
             Ensure.NotNull(log, "log");
             Ensure.Positive(maxQueueSize, "maxQueueSize");
@@ -190,6 +197,7 @@ namespace EventStore.ClientAPI
             ExternalGossipPort = externalGossipPort;
             GossipTimeout = gossipTimeout;
             PreferRandomNode = preferRandomNode;
+            CustomHttpClientHandler = connectionSettingsCustomHttpClientHandler;
         }
     }
 }

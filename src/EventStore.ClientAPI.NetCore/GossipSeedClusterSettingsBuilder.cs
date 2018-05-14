@@ -14,13 +14,14 @@ namespace EventStore.ClientAPI
         private TimeSpan _gossipTimeout = TimeSpan.FromSeconds(1);
         private int _maxDiscoverAttempts = Consts.DefaultMaxClusterDiscoverAttempts;
         private bool _preferRandomNode = false;
+        private bool _useTlsTerminatedSSL = false;
 
         /// <summary>
         /// Sets gossip seed endpoints for the client.
         /// TODO: This was a note.
         /// This should be the external HTTP endpoint of the server, as it is required
         /// for the client to exchange gossip with the server. The standard port is 2113.
-        /// 
+        ///
         /// If the server requires a specific Host header to be sent as part of the gossip
         /// request, use the overload of this method taking <see cref="GossipSeed" /> instead.
         /// </summary>
@@ -77,7 +78,17 @@ namespace EventStore.ClientAPI
         }
 
         /// <summary>
-        /// Whether to randomly choose a node that's alive from the known nodes. 
+        /// Whether to randomly choose a node that's alive from the known nodes.
+        /// </summary>
+        /// <returns>A <see cref="GossipSeedClusterSettingsBuilder"/> for further configuration.</returns>
+        public GossipSeedClusterSettingsBuilder GossipEndpointIsTlsTerminated()
+        {
+            _useTlsTerminatedSSL = true;
+            return this;
+        }
+
+        /// <summary>
+        /// Whether to randomly choose a node that's alive from the known nodes.
         /// </summary>
         /// <returns>A <see cref="GossipSeedClusterSettingsBuilder"/> for further configuration.</returns>
         public GossipSeedClusterSettingsBuilder PreferRandomNode()
@@ -85,6 +96,7 @@ namespace EventStore.ClientAPI
             _preferRandomNode = true;
             return this;
         }
+
 
         /// <summary>
         /// Builds a <see cref="ClusterSettings"/> object from a <see cref="GossipSeedClusterSettingsBuilder"/>.

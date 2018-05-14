@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Linq;
-using System.Net.Sockets;
 using EventStore.ClientAPI.Common.Utils;
 using EventStore.ClientAPI.Internal;
 using System;
@@ -101,7 +100,8 @@ namespace EventStore.ClientAPI
                         connectionSettings.ClientConnectionTimeout, connectionSettings.ClusterDns,
                         connectionSettings.GossipSeeds, connectionSettings.MaxDiscoverAttempts,
                         connectionSettings.ExternalGossipPort, connectionSettings.GossipTimeout,
-                        connectionSettings.PreferRandomNode);
+                        connectionSettings.PreferRandomNode,
+                        connectionSettings.CustomHttpClientHandler);
                 }
                 if (scheme == "discover")
                 {
@@ -116,7 +116,8 @@ namespace EventStore.ClientAPI
                         clusterSettings.ExternalGossipPort,
                         clusterSettings.GossipSeeds,
                         clusterSettings.GossipTimeout,
-                        clusterSettings.PreferRandomNode);
+                        clusterSettings.PreferRandomNode,
+                        connectionSettings.CustomHttpClientHandler);
 
                     return new EventStoreNodeConnection(connectionSettings, clusterSettings, endPointDiscoverer,
                         connectionName);
@@ -144,7 +145,8 @@ namespace EventStore.ClientAPI
                     clusterSettings.ExternalGossipPort,
                     clusterSettings.GossipSeeds,
                     clusterSettings.GossipTimeout,
-                    clusterSettings.PreferRandomNode);
+                    clusterSettings.PreferRandomNode,
+                    connectionSettings.CustomHttpClientHandler);
 
                 return new EventStoreNodeConnection(connectionSettings, clusterSettings, endPointDiscoverer,
                     connectionName);
@@ -192,7 +194,7 @@ namespace EventStore.ClientAPI
         }
 
         /// <summary>
-        /// Creates a new <see cref="IEventStoreConnection"/> to EventStore cluster 
+        /// Creates a new <see cref="IEventStoreConnection"/> to EventStore cluster
         /// using specific <see cref="ConnectionSettings"/> and <see cref="ClusterSettings"/>
         /// </summary>
         /// <param name="connectionSettings">The <see cref="ConnectionSettings"/> to apply to the new connection</param>
@@ -210,7 +212,8 @@ namespace EventStore.ClientAPI
                                                                       clusterSettings.ExternalGossipPort,
                                                                       clusterSettings.GossipSeeds,
                                                                       clusterSettings.GossipTimeout,
-                                                                      clusterSettings.PreferRandomNode);
+                                                                      clusterSettings.PreferRandomNode,
+                                                                      connectionSettings.CustomHttpClientHandler);
 
             return new EventStoreNodeConnection(connectionSettings, clusterSettings, endPointDiscoverer, connectionName);
         }

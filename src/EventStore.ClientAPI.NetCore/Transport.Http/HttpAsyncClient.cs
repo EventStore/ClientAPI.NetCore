@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Net;
 using System.Text;
 using EventStore.ClientAPI.Common.Utils;
 using EventStore.ClientAPI.SystemData;
@@ -14,10 +13,11 @@ namespace EventStore.ClientAPI.Transport.Http
     {
         private static readonly UTF8Encoding UTF8NoBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
         private HttpClient _client;
-        
-        public HttpAsyncClient(TimeSpan timeout) 
+
+        public HttpAsyncClient(TimeSpan timeout, HttpClientHandler clienthandler = null)
         {
-            _client = new HttpClient();
+
+            _client = clienthandler == null ? new HttpClient() : new HttpClient(clienthandler);
             _client.Timeout = timeout;
         }
 
@@ -133,10 +133,10 @@ namespace EventStore.ClientAPI.Transport.Http
             };
         }
 
-        private Action<Task<string>> ResponseRead(ClientOperationState state) 
+        private Action<Task<string>> ResponseRead(ClientOperationState state)
         {
             return task => {
-                try 
+                try
                 {
                     state.Response.Body = task.Result;
                     state.Dispose();
