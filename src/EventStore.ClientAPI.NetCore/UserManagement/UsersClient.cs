@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using HttpStatusCode = EventStore.ClientAPI.Transport.Http.HttpStatusCode;
@@ -15,12 +16,14 @@ namespace EventStore.ClientAPI.UserManagement
     {
         private readonly HttpAsyncClient _client;
 
+        private readonly ILogger _log;
         private readonly TimeSpan _operationTimeout;
 
-        public UsersClient(ILogger log, TimeSpan operationTimeout)
+        public UsersClient(ILogger log, TimeSpan operationTimeout, HttpClientHandler handler)
         {
+            _log = log;
             _operationTimeout = operationTimeout;
-            _client = new HttpAsyncClient(_operationTimeout);
+            _client = new HttpAsyncClient(_operationTimeout, handler);
         }
 
         public Task Enable(EndPoint endPoint, string login, UserCredentials userCredentials = null, string httpSchema = EndpointExtensions.HTTP_SCHEMA)
