@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using EventStore.ClientAPI.Common.Utils;
 using EventStore.ClientAPI.SystemData;
@@ -25,14 +26,17 @@ namespace EventStore.ClientAPI.UserManagement
         /// <param name="log">An instance of <see cref="ILogger"/> to use for logging.</param>
         /// <param name="httpEndPoint">HTTP endpoint of an Event Store server.</param>
         /// <param name="operationTimeout"></param>
-        public UsersManager(ILogger log, EndPoint httpEndPoint, TimeSpan operationTimeout, string httpSchema = EndpointExtensions.HTTP_SCHEMA)
+        /// <param name="tlsTerminatedEndpoint"></param>
+        /// <param name="handler">override httpclient handler</param>
+        public UsersManager(ILogger log, EndPoint httpEndPoint, TimeSpan operationTimeout,
+            bool tlsTerminatedEndpoint = false, HttpClientHandler handler = null)
         {
             Ensure.NotNull(log, "log");
             Ensure.NotNull(httpEndPoint, "httpEndPoint");
 
-            _client = new UsersClient(log, operationTimeout);
+            _client = new UsersClient(log, operationTimeout, handler);
             _httpEndPoint = httpEndPoint;
-            _httpSchema = httpSchema;
+            _httpSchema = tlsTerminatedEndpoint ? EndpointExtensions.HTTPS_SCHEMA : EndpointExtensions.HTTP_SCHEMA;
         }
 
         /// <summary>
@@ -44,7 +48,7 @@ namespace EventStore.ClientAPI.UserManagement
         public Task EnableAsync(string login, UserCredentials userCredentials = null)
         {
             Ensure.NotNullOrEmpty(login, "login");
-            return _client.Enable(_httpEndPoint, login, userCredentials);
+            return _client.Enable(_httpEndPoint, login, userCredentials, _httpSchema);
         }
 
         /// <summary>
@@ -56,7 +60,7 @@ namespace EventStore.ClientAPI.UserManagement
         public Task DisableAsync(string login, UserCredentials userCredentials = null)
         {
             Ensure.NotNullOrEmpty(login, "login");
-            return _client.Disable(_httpEndPoint, login, userCredentials);
+            return _client.Disable(_httpEndPoint, login, userCredentials, _httpSchema);
         }
 
         /// <summary>
@@ -68,7 +72,7 @@ namespace EventStore.ClientAPI.UserManagement
         public Task DeleteUserAsync(string login, UserCredentials userCredentials = null)
         {
             Ensure.NotNullOrEmpty(login, "login");
-            return _client.Delete(_httpEndPoint, login, userCredentials);
+            return _client.Delete(_httpEndPoint, login, userCredentials, _httpSchema);
         }
 
         /// <summary>
@@ -76,9 +80,9 @@ namespace EventStore.ClientAPI.UserManagement
         /// </summary>
         /// <param name="userCredentials">Credentials for the operation.</param>
         /// <returns>String of JSON containing user full names and logins.</returns>
-        public Task<List<UserDetails>> ListAllAsync(UserCredentials userCredentials = null) 
+        public Task<List<UserDetails>> ListAllAsync(UserCredentials userCredentials = null)
         {
-            return _client.ListAll(_httpEndPoint, userCredentials);
+            return _client.ListAll(_httpEndPoint, userCredentials, _httpSchema);
         }
 
         /// <summary>
@@ -86,9 +90,9 @@ namespace EventStore.ClientAPI.UserManagement
         /// </summary>
         /// <param name="userCredentials">Credentials for the operation.</param>
         /// <returns>A <see cref="UserDetails"/> object for the currently logged in user</returns>
-        public Task<UserDetails> GetCurrentUserAsync(UserCredentials userCredentials) 
+        public Task<UserDetails> GetCurrentUserAsync(UserCredentials userCredentials)
         {
-            return _client.GetCurrentUser(_httpEndPoint, userCredentials);
+            return _client.GetCurrentUser(_httpEndPoint, userCredentials, _httpSchema);
         }
 
         /// <summary>
@@ -97,10 +101,10 @@ namespace EventStore.ClientAPI.UserManagement
         /// <param name="login">the login for the user who's details should be retrieved.</param>
         /// <param name="userCredentials">Credentials for the operation.</param>
         /// <returns>A <see cref="UserDetails"/> object for the user</returns>
-        public Task<UserDetails> GetUserAsync(string login, UserCredentials userCredentials) 
+        public Task<UserDetails> GetUserAsync(string login, UserCredentials userCredentials)
         {
             Ensure.NotNullOrEmpty(login, "login");
-            return _client.GetUser(_httpEndPoint, login, userCredentials);
+            return _client.GetUser(_httpEndPoint, login, userCredentials, _httpSchema);
         }
 
         /// <summary>
@@ -119,8 +123,7 @@ namespace EventStore.ClientAPI.UserManagement
             Ensure.NotNullOrEmpty(fullName, "fullName");
             Ensure.NotNull(groups, "groups");
             Ensure.NotNullOrEmpty(password, "password");
-            return _client.CreateUser(_httpEndPoint, new UserCreationInformation(login, fullName, groups, password),
-                userCredentials);
+            return _client.CreateUser(_httpEndPoint, new UserCreationInformation(login, fullName, groups, password), userCredentials, _httpSchema);
         }
 
         /// <summary>
@@ -136,7 +139,7 @@ namespace EventStore.ClientAPI.UserManagement
             Ensure.NotNullOrEmpty(login, "login");
             Ensure.NotNullOrEmpty(fullName, "fullName");
             Ensure.NotNull(groups, "groups");
-            return _client.UpdateUser(_httpEndPoint, login, new UserUpdateInformation(fullName, groups), userCredentials);
+            return _client.UpdateUser(_httpEndPoint, login, new UserUpdateInformation(fullName, groups), userCredentials, _httpSchema);
         }
 
         /// <summary>
@@ -153,8 +156,7 @@ namespace EventStore.ClientAPI.UserManagement
             Ensure.NotNullOrEmpty(login, "login");
             Ensure.NotNullOrEmpty(oldPassword, "oldPassword");
             Ensure.NotNullOrEmpty(newPassword, "newPassword");
-            return _client.ChangePassword(_httpEndPoint, login, new ChangePasswordDetails(oldPassword, newPassword),
-                userCredentials);
+            return _client.ChangePassword(_httpEndPoint, login, new ChangePasswordDetails(oldPassword, newPassword), userCredentials, _httpSchema);
         }
 
         /// <summary>
@@ -168,7 +170,7 @@ namespace EventStore.ClientAPI.UserManagement
         {
             Ensure.NotNullOrEmpty(login, "login");
             Ensure.NotNullOrEmpty(newPassword, "newPassword");
-            return _client.ResetPassword(_httpEndPoint, login, new ResetPasswordDetails(newPassword), userCredentials);
+            return _client.ResetPassword(_httpEndPoint, login, new ResetPasswordDetails(newPassword), userCredentials, _httpSchema);
         }
     }
 }

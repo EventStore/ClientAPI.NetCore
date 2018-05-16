@@ -8,6 +8,7 @@ using EventStore.ClientAPI.Exceptions;
 using EventStore.ClientAPI.Messages;
 using EventStore.ClientAPI.Transport.Http;
 using System.Linq;
+using System.Net.Http;
 using HttpStatusCode = EventStore.ClientAPI.Transport.Http.HttpStatusCode;
 
 namespace EventStore.ClientAPI.Internal
@@ -25,13 +26,14 @@ namespace EventStore.ClientAPI.Internal
         private TimeSpan _gossipTimeout;
         private readonly bool _preferRandomNode;
 
-        public ClusterDnsEndPointDiscoverer(ILogger log, 
+        public ClusterDnsEndPointDiscoverer(ILogger log,
                                             string clusterDns,
-                                            int maxDiscoverAttempts, 
+                                            int maxDiscoverAttempts,
                                             int managerExternalHttpPort,
                                             GossipSeed[] gossipSeeds,
                                             TimeSpan gossipTimeout,
-                                            bool preferRandomNode)
+                                            bool preferRandomNode,
+                                            HttpClientHandler clientHandler = null)
         {
             Ensure.NotNull(log, "log");
 
@@ -42,11 +44,11 @@ namespace EventStore.ClientAPI.Internal
             _gossipSeeds = gossipSeeds;
             _gossipTimeout = gossipTimeout;
             _preferRandomNode = preferRandomNode;
-            _client = new HttpAsyncClient(_gossipTimeout);
+            _client = new HttpAsyncClient(_gossipTimeout, clientHandler);
         }
 
         public async Task<NodeEndPoints> DiscoverAsync(IPEndPoint failedTcpEndPoint )
-        {   
+        {
             for (int attempt = 1; attempt <= _maxDiscoverAttempts; ++attempt)
             {
                 //_log.Info("Discovering cluster. Attempt {0}/{1}...", attempt, _maxDiscoverAttempts);
@@ -68,7 +70,7 @@ namespace EventStore.ClientAPI.Internal
 
                 Thread.Sleep(500);
             }
-            throw new ClusterException(string.Format("Failed to discover candidate in {0} attempts.", _maxDiscoverAttempts));   
+            throw new ClusterException(string.Format("Failed to discover candidate in {0} attempts.", _maxDiscoverAttempts));
         }
 
         private async Task<NodeEndPoints?> DiscoverEndPoint(IPEndPoint failedEndPoint)
@@ -101,12 +103,12 @@ namespace EventStore.ClientAPI.Internal
             if(_gossipSeeds != null && _gossipSeeds.Length > 0)
             {
                 endpoints = _gossipSeeds;
-            } 
+            }
             else
             {
                 endpoints = (await ResolveDns(_clusterDns)).Select(x => new GossipSeed(new IPEndPoint(x, _managerExternalHttpPort))).ToArray();
             }
-            
+
             RandomShuffle(endpoints, 0, endpoints.Length-1);
             return endpoints;
         }
@@ -130,9 +132,9 @@ namespace EventStore.ClientAPI.Internal
         private GossipSeed[] GetGossipCandidatesFromOldGossip(IEnumerable<ClusterMessages.MemberInfoDto> oldGossip, IPEndPoint failedTcpEndPoint)
         {
             //_log.Debug("ClusterDnsEndPointDiscoverer: GetGossipCandidatesFromOldGossip, failedTcpEndPoint: {0}.", failedTcpEndPoint);
-            var gossipCandidates = failedTcpEndPoint == null 
-                    ? oldGossip.ToArray() 
-                    : oldGossip.Where(x => !(x.ExternalTcpPort == failedTcpEndPoint.Port 
+            var gossipCandidates = failedTcpEndPoint == null
+                    ? oldGossip.ToArray()
+                    : oldGossip.Where(x => !(x.ExternalTcpPort == failedTcpEndPoint.Port
                                              && IPAddress.Parse(x.ExternalTcpIp).Equals(failedTcpEndPoint.Address)))
                                .ToArray();
             return ArrangeGossipCandidates(gossipCandidates);
@@ -177,7 +179,7 @@ namespace EventStore.ClientAPI.Internal
             ClusterMessages.ClusterInfoDto result = null;
             var completed = new ManualResetEventSlim(false);
 
-            var url = endPoint.EndPoint.ToHttpUrl(EndpointExtensions.HTTP_SCHEMA, "/gossip?format=json");
+            var url = endPoint.EndPoint.ToHttpUrl(endPoint.EndpointIsTlsTerminated ? EndpointExtensions.HTTPS_SCHEMA : EndpointExtensions.HTTP_SCHEMA, "/gossip?format=json");
             _client.Get(
                 url,
                 null,
@@ -214,7 +216,7 @@ namespace EventStore.ClientAPI.Internal
         {
             var notAllowedStates = new[]
             {
-                ClusterMessages.VNodeState.Manager, 
+                ClusterMessages.VNodeState.Manager,
                 ClusterMessages.VNodeState.ShuttingDown,
                 ClusterMessages.VNodeState.Shutdown
             };

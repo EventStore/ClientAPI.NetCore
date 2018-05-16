@@ -15,10 +15,10 @@ namespace EventStore.ClientAPI.Projections
         private readonly HttpAsyncClient _client;
         private readonly TimeSpan _operationTimeout;
 
-        public ProjectionsClient(ILogger log, TimeSpan operationTimeout)
+        public ProjectionsClient(ILogger log, TimeSpan operationTimeout, System.Net.Http.HttpClientHandler clienthandler)
         {
             _operationTimeout = operationTimeout;
-            _client = new HttpAsyncClient(_operationTimeout);
+            _client = new HttpAsyncClient(_operationTimeout, clienthandler);
         }
 
         public Task Enable(EndPoint endPoint, string name, UserCredentials userCredentials = null, string httpSchema = EndpointExtensions.HTTP_SCHEMA)

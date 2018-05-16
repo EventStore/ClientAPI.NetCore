@@ -4,12 +4,13 @@ using EventStore.ClientAPI.SystemData;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace EventStore.ClientAPI.Projections
 {
     /// <summary>
-    /// API for executinmg queries in the Event Store through C# code. Communicates
+    /// API for executing queries in the Event Store through C# code. Communicates
     /// with the Event Store over the RESTful API.
     /// </summary>
     public class QueryManager
@@ -24,10 +25,11 @@ namespace EventStore.ClientAPI.Projections
         /// <param name="ipHttpEndPoint">HTTP IP endpoint of an Event Store server.</param>
         /// <param name="projectionOperationTimeout">Timeout of projection API operations</param>
         /// <param name="queryTimeout">Timeout of query execution</param>
-        public QueryManager(ILogger log, IPEndPoint ipHttpEndPoint, TimeSpan projectionOperationTimeout, TimeSpan queryTimeout)
+        /// <param name="clienthandler">Overideable HTTP Client Handler</param>
+        public QueryManager(ILogger log, IPEndPoint ipHttpEndPoint, TimeSpan projectionOperationTimeout, TimeSpan queryTimeout, HttpClientHandler clienthandler = null)
         {
             _queryTimeout = queryTimeout;
-            _projectionsManager = new ProjectionsManager(log, ipHttpEndPoint, projectionOperationTimeout);
+            _projectionsManager = new ProjectionsManager(log, ipHttpEndPoint, projectionOperationTimeout, clienthandler);
         }
 
         /// <summary>
@@ -37,10 +39,11 @@ namespace EventStore.ClientAPI.Projections
         /// <param name="dnsHttpEndPoint">HTTP DNS endpoint of an Event Store server.</param>
         /// <param name="projectionOperationTimeout">Timeout of projection API operations</param>
         /// <param name="queryTimeout">Timeout of query execution</param>
-        public QueryManager(ILogger log, DnsEndPoint dnsHttpEndPoint, TimeSpan projectionOperationTimeout, TimeSpan queryTimeout)
+        /// <param name="clienthandler">Overideable HTTP Client Handler</param>
+        public QueryManager(ILogger log, DnsEndPoint dnsHttpEndPoint, TimeSpan projectionOperationTimeout, TimeSpan queryTimeout, HttpClientHandler clienthandler = null)
         {
             _queryTimeout = queryTimeout;
-            _projectionsManager = new ProjectionsManager(log, dnsHttpEndPoint, projectionOperationTimeout);
+            _projectionsManager = new ProjectionsManager(log, dnsHttpEndPoint, projectionOperationTimeout, clienthandler);
         }
 
         /// <summary>

@@ -20,34 +20,21 @@ namespace EventStore.ClientAPI
         /// TODO: This was a note.
         /// This should be the external HTTP endpoint of the server, as it is required
         /// for the client to exchange gossip with the server. The standard port is 2113.
-        /// 
+        ///
         /// If the server requires a specific Host header to be sent as part of the gossip
         /// request, use the overload of this method taking <see cref="GossipSeed" /> instead.
         /// </summary>
-        /// <param name="gossipSeeds"><see cref="IPEndPoint" />s representing the endpoints of nodes from which to seed gossip.</param>
-        /// <returns>A <see cref="ClusterSettingsBuilder"/> for further configuration.</returns>
-        /// <exception cref="ArgumentException">If no gossip seeds are specified.</exception>
-        public GossipSeedClusterSettingsBuilder SetGossipSeedEndPoints(params IPEndPoint[] gossipSeeds)
-        {
-            if (gossipSeeds == null || gossipSeeds.Length == 0)
-                throw new ArgumentException("Empty FakeDnsEntries collection.");
-
-            _gossipSeeds = gossipSeeds.Select(x => new GossipSeed(x)).ToArray();
-
-            return this;
-        }
-
-        /// <summary>
-        /// Sets gossip seed endpoints for the client.
-        /// </summary>
+        /// <param name="tlsTerminatedEndpoints">Specifies that eventstore should use https when connecting to gossip</param>
         /// <param name="gossipSeeds"><see cref="GossipSeed"/>s representing the endpoints of nodes from which to seed gossip.</param>
         /// <returns>A <see cref="ClusterSettingsBuilder"/> for further configuration.</returns>
         /// <exception cref="ArgumentException">If no gossip seeds are specified.</exception>
-        public GossipSeedClusterSettingsBuilder SetGossipSeedEndPoints(params GossipSeed[] gossipSeeds)
+        public GossipSeedClusterSettingsBuilder SetGossipSeedEndPoints(bool tlsTerminatedEndpoints = false, params IPEndPoint[] gossipSeeds)
         {
             if (gossipSeeds == null || gossipSeeds.Length == 0)
                 throw new ArgumentException("Empty FakeDnsEntries collection.");
-            _gossipSeeds = gossipSeeds;
+
+            _gossipSeeds = gossipSeeds.Select(x => new GossipSeed(x, endpointIsTlsTerminated: tlsTerminatedEndpoints)).ToArray();
+
             return this;
         }
 
@@ -77,7 +64,7 @@ namespace EventStore.ClientAPI
         }
 
         /// <summary>
-        /// Whether to randomly choose a node that's alive from the known nodes. 
+        /// Whether to randomly choose a node that's alive from the known nodes.
         /// </summary>
         /// <returns>A <see cref="GossipSeedClusterSettingsBuilder"/> for further configuration.</returns>
         public GossipSeedClusterSettingsBuilder PreferRandomNode()
@@ -85,6 +72,7 @@ namespace EventStore.ClientAPI
             _preferRandomNode = true;
             return this;
         }
+
 
         /// <summary>
         /// Builds a <see cref="ClusterSettings"/> object from a <see cref="GossipSeedClusterSettingsBuilder"/>.
