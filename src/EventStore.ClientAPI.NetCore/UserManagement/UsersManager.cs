@@ -26,17 +26,17 @@ namespace EventStore.ClientAPI.UserManagement
         /// <param name="log">An instance of <see cref="ILogger"/> to use for logging.</param>
         /// <param name="httpEndPoint">HTTP endpoint of an Event Store server.</param>
         /// <param name="operationTimeout"></param>
-        /// <param name="useSslConnection"></param>
+        /// <param name="tlsTerminatedEndpoint"></param>
         /// <param name="handler">override httpclient handler</param>
         public UsersManager(ILogger log, EndPoint httpEndPoint, TimeSpan operationTimeout,
-            bool useSslConnection = false, HttpClientHandler handler = null)
+            bool tlsTerminatedEndpoint = false, HttpClientHandler handler = null)
         {
             Ensure.NotNull(log, "log");
             Ensure.NotNull(httpEndPoint, "httpEndPoint");
 
             _client = new UsersClient(log, operationTimeout, handler);
             _httpEndPoint = httpEndPoint;
-            _httpSchema = useSslConnection ? EndpointExtensions.HTTPS_SCHEMA : EndpointExtensions.HTTP_SCHEMA;
+            _httpSchema = tlsTerminatedEndpoint ? EndpointExtensions.HTTPS_SCHEMA : EndpointExtensions.HTTP_SCHEMA;
         }
 
         /// <summary>
