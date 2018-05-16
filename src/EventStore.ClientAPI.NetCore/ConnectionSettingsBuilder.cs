@@ -400,36 +400,12 @@ namespace EventStore.ClientAPI
         /// <param name="gossipSeeds"><see cref="IPEndPoint" />s representing the endpoints of nodes from which to seed gossip.</param>
         ///  <returns>A <see cref="ClusterSettingsBuilder"/> for further configuration.</returns>
         ///  <exception cref="ArgumentException">If no gossip seeds are specified.</exception>
-        public ConnectionSettingsBuilder SetGossipSeedEndPoints(bool tlsTerminatedEndpoints, params IPEndPoint[] gossipSeeds)
+        public ConnectionSettingsBuilder SetGossipSeedEndPoints(bool tlsTerminatedEndpoints = false, params IPEndPoint[] gossipSeeds)
         {
             if (gossipSeeds == null || gossipSeeds.Length == 0)
                 throw new ArgumentException("Empty FakeDnsEntries collection.");
 
             _gossipSeeds = gossipSeeds.Select(x => new GossipSeed(x, endpointIsTlsTerminated:tlsTerminatedEndpoints)).ToArray();
-
-            return this;
-        }
-
-        /// <summary>
-        /// Sets gossip seed endpoints for the client.
-        ///
-        /// <note>
-        /// This should be the external HTTP endpoint of the server, as it is required
-        /// for the client to exchange gossip with the server. The standard port is 2113.
-        /// </note>
-        ///
-        /// If the server requires a specific Host header to be sent as part of the gossip
-        /// request, use the overload of this method taking <see cref="GossipSeed" /> instead.
-        /// </summary>
-        /// <param name="gossipSeeds"><see cref="IPEndPoint" />s representing the endpoints of nodes from which to seed gossip.</param>
-        /// <returns>A <see cref="ClusterSettingsBuilder"/> for further configuration.</returns>
-        /// <exception cref="ArgumentException">If no gossip seeds are specified.</exception>
-        public ConnectionSettingsBuilder SetGossipSeedEndPoints(params IPEndPoint[] gossipSeeds)
-        {
-            if (gossipSeeds == null || gossipSeeds.Length == 0)
-                throw new ArgumentException("Empty FakeDnsEntries collection.");
-
-            _gossipSeeds = gossipSeeds.Select(x => new GossipSeed(x)).ToArray();
 
             return this;
         }
