@@ -1,10 +1,10 @@
+using System;
+using System.Net;
+using System.Threading.Tasks;
 using EventStore.ClientAPI.Common.Utils;
 using EventStore.ClientAPI.Common.Utils.Threading;
 using EventStore.ClientAPI.SystemData;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace EventStore.ClientAPI.Projections
 {
@@ -21,38 +21,13 @@ namespace EventStore.ClientAPI.Projections
         /// Creates a new instance of <see cref="QueryManager"/>.
         /// </summary>
         /// <param name="log">An instance of <see cref="ILogger"/> to use for logging.</param>
-        /// <param name="ipHttpEndPoint">HTTP IP endpoint of an Event Store server.</param>
+        /// <param name="httpEndPoint">HTTP endpoint of an Event Store server.</param>
         /// <param name="projectionOperationTimeout">Timeout of projection API operations</param>
         /// <param name="queryTimeout">Timeout of query execution</param>
-        public QueryManager(ILogger log, IPEndPoint ipHttpEndPoint, TimeSpan projectionOperationTimeout, TimeSpan queryTimeout)
+        public QueryManager(ILogger log, IPEndPoint httpEndPoint, TimeSpan projectionOperationTimeout, TimeSpan queryTimeout)
         {
             _queryTimeout = queryTimeout;
-            _projectionsManager = new ProjectionsManager(log, ipHttpEndPoint, projectionOperationTimeout);
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="QueryManager"/>.
-        /// </summary>
-        /// <param name="log">An instance of <see cref="ILogger"/> to use for logging.</param>
-        /// <param name="dnsHttpEndPoint">HTTP DNS endpoint of an Event Store server.</param>
-        /// <param name="projectionOperationTimeout">Timeout of projection API operations</param>
-        /// <param name="queryTimeout">Timeout of query execution</param>
-        public QueryManager(ILogger log, DnsEndPoint dnsHttpEndPoint, TimeSpan projectionOperationTimeout, TimeSpan queryTimeout)
-        {
-            _queryTimeout = queryTimeout;
-            _projectionsManager = new ProjectionsManager(log, dnsHttpEndPoint, projectionOperationTimeout);
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="T:EventStore.ClientAPI.Projections.QueryManager" />.
-        /// </summary>
-        /// <param name="log">An instance of <see cref="T:EventStore.ClientAPI.ILogger" /> to use for logging.</param>
-        /// <param name="uri">HTTP URI endpoint of an Event Store server.</param>
-        /// <param name="projectionOperationTimeout">Timeout of projection API operations</param>
-        /// <param name="queryTimeout">Timeout of query execution</param>
-        public QueryManager(ILogger log, Uri uri, TimeSpan projectionOperationTimeout, TimeSpan queryTimeout)
-            : this(log, new DnsEndPoint(uri.Host, uri.Port), projectionOperationTimeout, queryTimeout)
-        {
+            _projectionsManager = new ProjectionsManager(log, httpEndPoint, projectionOperationTimeout);
         }
 
         /// <summary>
