@@ -1,18 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.Common.Utils;
 using EventStore.ClientAPI.Exceptions;
 using EventStore.Core.Tests.ClientAPI.Helpers;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EventStore.Core.Tests.ClientAPI
 {
     [TestFixture, Category("LongRunning")]
-    public class transaction 
+    public class transaction
     {
 
         protected virtual IEventStoreConnection BuildConnection()
@@ -30,7 +30,7 @@ namespace EventStore.Core.Tests.ClientAPI
                 store.ConnectAsync().Wait();
                 using (var transaction = store.StartTransactionAsync(stream, ExpectedVersion.NoStream).Result)
                 {
-                    transaction.WriteAsync(new[] {TestEvent.NewTestEvent()}).Wait();
+                    transaction.WriteAsync(new[] { TestEvent.NewTestEvent() }).Wait();
                     Assert.AreEqual(0, transaction.CommitAsync().Result.NextExpectedVersion);
                 }
             }
@@ -46,7 +46,7 @@ namespace EventStore.Core.Tests.ClientAPI
                 store.ConnectAsync().Wait();
                 using (var transaction = store.StartTransactionAsync(stream, ExpectedVersion.Any).Result)
                 {
-                    transaction.WriteAsync(new[] {TestEvent.NewTestEvent()}).Wait();
+                    transaction.WriteAsync(new[] { TestEvent.NewTestEvent() }).Wait();
                     Assert.AreEqual(0, transaction.CommitAsync().Result.NextExpectedVersion);
                 }
             }
@@ -134,53 +134,51 @@ namespace EventStore.Core.Tests.ClientAPI
 
             const int totalTranWrites = 500;
             const int totalPlainWrites = 500;
-
+            
             //500 events during transaction
             ThreadPool.QueueUserWorkItem(_ =>
             {
-                Assert.DoesNotThrow(() => {
-                    using (var store = BuildConnection())
+                using (var store = BuildConnection())
+                {
+                    store.ConnectAsync().Wait();
+                    using (var transaction = store.StartTransactionAsync(stream, ExpectedVersion.Any).Result)
                     {
-                        store.ConnectAsync().Wait();
-                        using (var transaction = store.StartTransactionAsync(stream, ExpectedVersion.Any).Result)
+
+                        var writes = new List<Task>();
+                        for (int i = 0; i < totalTranWrites; i++)
                         {
-
-                            var writes = new List<Task>();
-                            for (int i = 0; i < totalTranWrites; i++)
-                            {
-                                writes.Add(transaction.WriteAsync(TestEvent.NewTestEvent(i.ToString(), "trans write")));
-                            }
-
-                            Task.WaitAll(writes.ToArray());
-                            transaction.CommitAsync().Wait();
-                            transWritesCompleted.Set();
+                            writes.Add(transaction.WriteAsync(TestEvent.NewTestEvent(i.ToString(), "trans write")));
                         }
+
+                        Task.WaitAll(writes.ToArray());
+                        transaction.CommitAsync().Wait();
+                        transWritesCompleted.Set();
                     }
-                });
+                }
+
             });
 
             //500 events to same stream in parallel
             ThreadPool.QueueUserWorkItem(_ =>
             {
-                Assert.DoesNotThrow(() => {
-                    using (var store = BuildConnection())
+                using (var store = BuildConnection())
+                {
+                    store.ConnectAsync().Wait();
+                    var writes = new List<Task>();
+                    for (int i = 0; i < totalPlainWrites; i++)
                     {
-                        store.ConnectAsync().Wait();
-                        var writes = new List<Task>();
-                        for (int i = 0; i < totalPlainWrites; i++)
-                        {
-                            writes.Add(store.AppendToStreamAsync(stream,
-                                                                 ExpectedVersion.Any,
-                                                                 new[] {TestEvent.NewTestEvent(i.ToString(), "plain write")}));
-                        }
-                        Task.WaitAll(writes.ToArray());
-                        writesToSameStreamCompleted.Set();
+                        writes.Add(store.AppendToStreamAsync(stream,
+                            ExpectedVersion.Any,
+                            new[] { TestEvent.NewTestEvent(i.ToString(), "plain write") }));
                     }
-                });
+
+                    Task.WaitAll(writes.ToArray());
+                    writesToSameStreamCompleted.Set();
+                }
             });
 
-            transWritesCompleted.Wait();
-            writesToSameStreamCompleted.Wait();
+            Assert.DoesNotThrow(() => transWritesCompleted.Wait());
+            Assert.DoesNotThrow(() => writesToSameStreamCompleted.Wait());
 
             // check all written
             using (var store = BuildConnection())
@@ -206,7 +204,7 @@ namespace EventStore.Core.Tests.ClientAPI
                 store.ConnectAsync().Wait();
                 using (var transaction = store.StartTransactionAsync(stream, ExpectedVersion.EmptyStream).Result)
                 {
-                    store.AppendToStreamAsync(stream, ExpectedVersion.EmptyStream, new[] {TestEvent.NewTestEvent()}).Wait();
+                    store.AppendToStreamAsync(stream, ExpectedVersion.EmptyStream, new[] { TestEvent.NewTestEvent() }).Wait();
                     transaction.WriteAsync(TestEvent.NewTestEvent()).Wait();
                     Assert.That(() => transaction.CommitAsync().Wait(),
                                 Throws.Exception.TypeOf<AggregateException>().With.InnerException.TypeOf<WrongExpectedVersionException>());
@@ -223,7 +221,7 @@ namespace EventStore.Core.Tests.ClientAPI
                 store.ConnectAsync().Wait();
                 using (var transaction = store.StartTransactionAsync(stream, 0).Result)
                 {
-                    store.AppendToStreamAsync(stream, ExpectedVersion.EmptyStream, new[] {TestEvent.NewTestEvent()}).Wait();
+                    store.AppendToStreamAsync(stream, ExpectedVersion.EmptyStream, new[] { TestEvent.NewTestEvent() }).Wait();
                     transaction.WriteAsync(TestEvent.NewTestEvent()).Wait();
                     Assert.AreEqual(1, transaction.CommitAsync().Result.NextExpectedVersion);
                 }
@@ -259,11 +257,11 @@ namespace EventStore.Core.Tests.ClientAPI
                 var e = new EventData(Guid.NewGuid(), "SomethingHappened", true, Helper.UTF8NoBom.GetBytes("{Value:42}"), null);
 
                 var transaction1 = store.StartTransactionAsync(streamId, ExpectedVersion.Any).Result;
-                transaction1.WriteAsync(new[] {e}).Wait();
+                transaction1.WriteAsync(new[] { e }).Wait();
                 Assert.AreEqual(0, transaction1.CommitAsync().Result.NextExpectedVersion);
 
                 var transaction2 = store.StartTransactionAsync(streamId, ExpectedVersion.Any).Result;
-                transaction2.WriteAsync(new[] {e}).Wait();
+                transaction2.WriteAsync(new[] { e }).Wait();
                 Assert.AreEqual(0, transaction2.CommitAsync().Result.NextExpectedVersion);
 
                 var res = store.ReadStreamEventsForwardAsync(streamId, 0, 100, false).Result;
