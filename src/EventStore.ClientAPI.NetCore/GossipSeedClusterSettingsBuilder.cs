@@ -50,6 +50,16 @@ namespace EventStore.ClientAPI
             _gossipSeeds = gossipSeeds;
             return this;
         }
+        
+        /// <summary>
+        /// Allows infinite nodes discovery attempts.
+        /// </summary>
+        /// <returns>A <see cref="ClusterSettingsBuilder"/> for further configuration.</returns>
+        public GossipSeedClusterSettingsBuilder KeepDiscovering()
+        {
+            _maxDiscoverAttempts = Int32.MaxValue;
+            return this;
+        }
 
         /// <summary>
         /// Sets the maximum number of attempts for discovery.
