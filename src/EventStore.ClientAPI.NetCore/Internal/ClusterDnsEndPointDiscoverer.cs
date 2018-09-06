@@ -70,7 +70,7 @@ namespace EventStore.ClientAPI.Internal
                     _log.Info("Discovering attempt {0}{1} failed with error: {2}.", attempt, maxDiscoverAttemptsStr, exc); 
                 }
 
-                await Task.Delay(500);
+                await Task.Delay(500).ConfigureAwait(false);
             }
             throw new ClusterException(string.Format("Failed to discover candidate in {0} attempts.", _maxDiscoverAttempts));   
         }
