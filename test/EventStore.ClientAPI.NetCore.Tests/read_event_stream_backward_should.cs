@@ -23,7 +23,7 @@ namespace EventStore.Core.Tests.ClientAPI
             using (var store = BuildConnection())
             {
                 store.ConnectAsync().Wait();
-                Assert.Throws<ArgumentOutOfRangeException>(() => store.ReadStreamEventsBackwardAsync(stream, 0, 0, resolveLinkTos: false));
+                Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => store.ReadStreamEventsBackwardAsync(stream, 0, 0, resolveLinkTos: false));
             }
         }
 
@@ -206,7 +206,7 @@ namespace EventStore.Core.Tests.ClientAPI
             {
                 store.ConnectAsync().Wait();
 
-                Assert.Throws<ArgumentException>(() => store.ReadStreamEventsBackwardAsync("foo", StreamPosition.Start, int.MaxValue, resolveLinkTos: false));
+                Assert.ThrowsAsync<ArgumentException>(() => store.ReadStreamEventsBackwardAsync("foo", StreamPosition.Start, int.MaxValue, resolveLinkTos: false));
 
             }
         }
