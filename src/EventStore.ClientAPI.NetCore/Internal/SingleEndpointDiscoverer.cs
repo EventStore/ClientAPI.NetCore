@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using EventStore.ClientAPI.Internal;
 
-namespace EventStore.ClientApi.Core.Internal
+namespace EventStore.ClientAPI.Internal
 {
     internal class SingleEndpointDiscoverer : IEndPointDiscoverer
     {

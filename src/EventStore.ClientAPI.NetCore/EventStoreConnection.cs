@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using EventStore.ClientAPI.Common.Utils;
 using EventStore.ClientAPI.Internal;
 using System;
-using EventStore.ClientApi.Core.Internal;
 using EventStore.ClientAPI.SystemData;
 
 namespace EventStore.ClientAPI
