@@ -12,13 +12,13 @@
     <Version>4.1.1-rc</Version>
   </PropertyGroup>
   <PropertyGroup>
-    <Description>The client API for the Event Store. Get the open source or commercial versions of the Event Store server from http://geteventstore.com</Description>
+    <Description>The client API for the Event Store. Get the open source or commercial versions of the Event Store server from http://eventstore.org</Description>
     <Authors>Event Store LLP</Authors>
     <DebugType>portable</DebugType>
     <AssemblyName>EventStore.ClientAPI.NetCore</AssemblyName>
     <PackageId>EventStore.ClientAPI.NetCore</PackageId>
     <PackageTags>eventstore;client;netstandard2.0</PackageTags>
-    <PackageIconUrl>http://geteventstore.com/assets/ouro-200.png</PackageIconUrl>
+    <PackageIconUrl>https://eventstore.org/images/ouro.svg</PackageIconUrl>
     <PackageLicenseUrl>https://github.com/EventStore/netcore-client/blob/master/LICENSE.md</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/EventStore/ClientAPI.NetCore</RepositoryUrl>
