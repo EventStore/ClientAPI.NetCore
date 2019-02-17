@@ -164,7 +164,7 @@ namespace EventStore.ClientAPI.Projections
         }
 
         /// <summary>
-        /// Synchronously lists this status of all continuous projections.
+        /// Asynchronously lists this status of all continuous projections.
         /// </summary>
         /// <param name="userCredentials">Credentials for the operation.</param>
         /// <returns>String of JSON containing projection statuses.</returns>
@@ -175,7 +175,7 @@ namespace EventStore.ClientAPI.Projections
         }
 
         /// <summary>
-        /// Synchronously lists this status of all continuous projections.
+        /// Asynchronously lists this status of all continuous projections.
         /// </summary>
         /// <param name="userCredentials">Credentials for the operation.</param>
         /// <returns>List of continuous ProjectionDetails items containing projection statuses.</returns>
