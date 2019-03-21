@@ -33,8 +33,11 @@ namespace EventStore.ClientAPI
         /// <summary>
         /// The stream should exist and should be empty. If it does not exist or is not empty treat that as a concurrency problem.
         /// </summary>
-        public const long EmptyStream = -1;
-
+        public const long EmptyStream = 0;
+        /// <summary>
+        /// The stream is invalid
+        /// </summary>
+        public const long Invalid = -3;
         /// <summary>
         /// The stream should exist. If it or a metadata stream does not exist treat that as a concurrency problem.
         /// </summary>
